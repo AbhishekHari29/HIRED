@@ -8,7 +8,7 @@
     app:cardElevation="8dp">
 
     <RelativeLayout
-        android:id="@+id/most_viewed_card"
+        android:id="@+id/category_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/card1"

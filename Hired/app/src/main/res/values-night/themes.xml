@@ -15,4 +15,11 @@
         <!-- Customize your theme here. -->
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="navigationTheme">
+
+        <item name="colorPrimary">@color/blue_200</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+
+    </style>
 </resources>

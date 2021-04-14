@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
         CategoryHelper serviceHelper = categories.get(position);
         holder.image.setImageResource(serviceHelper.getImage());
         holder.title.setText(serviceHelper.getTitle());
+        holder.layout.setBackground(serviceHelper.getBackground());
     }
 
     @Override
@@ -41,11 +43,13 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.Catego
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder{
+        RelativeLayout layout;
         ImageView image;
         TextView title;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
+            layout = itemView.findViewById(R.id.category_card);
             image = itemView.findViewById(R.id.category_image);
             title = itemView.findViewById(R.id.category_title);
 

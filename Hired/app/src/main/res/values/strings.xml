@@ -9,6 +9,7 @@
     <string name="sign_in">Sign In</string>
     <string name="featured_services_description">You can find all the featured services and their description here</string>
     <string name="dummy_description">asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas</string>
+    <string name="app_slogan">The opposite of Fired. Literally!</string>
 
     <string-array name="gender">
         <item>Male</item>
