@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Hired</string>
+    <string name="welcome_to_hired">Hello There! Welcome to Hired</string>
+    <string name="sign_in_header">Sign In to Continue</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_user_register_here">New User? Register Here</string>
+    <string name="sign_in">Sign In</string>
+    <string name="featured_services_description">You can find all the featured services and their description here</string>
+    <string name="dummy_description">asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas</string>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+    <string-array name="user_type">
+        <item>Individual</item>
+        <item>Organisation</item>
+    </string-array>
+</resources>

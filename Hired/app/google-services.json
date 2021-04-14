@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "395284413677",
+    "project_id": "hired-app",
+    "storage_bucket": "hired-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395284413677:android:ea118d50f0ccdc6b0e20e4",
+        "android_client_info": {
+          "package_name": "com.droidevils.hired"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395284413677-islo4b9nnapve1r4s7cpfh9onc7nbfkv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9wlYxNJwnddzwkJ6WkBkh0QrbcZLH8jQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395284413677-islo4b9nnapve1r4s7cpfh9onc7nbfkv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
