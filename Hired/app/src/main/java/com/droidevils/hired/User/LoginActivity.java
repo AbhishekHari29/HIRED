@@ -2,6 +2,7 @@ package com.droidevils.hired.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -29,7 +30,6 @@ import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ImageView appIcon;
     private TextView headerText;
     private TextInputLayout emailLayout, passwordLayout;
     private CheckBox rememberMe;
@@ -42,12 +42,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         loadingDialog = new LoadingDialog(LoginActivity.this);
-
-        appIcon = (ImageView) findViewById(R.id.appIcon);
         headerText = (TextView) findViewById(R.id.header);
         emailLayout = (TextInputLayout) findViewById(R.id.email_layout);
         passwordLayout = (TextInputLayout) findViewById(R.id.password_layout);
@@ -125,13 +124,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                Pair[] pairs = new Pair[6];
-                pairs[0] = new Pair<View, String>(appIcon, "appIcon");
-                pairs[1] = new Pair<View, String>(headerText, "header_text");
-                pairs[2] = new Pair<View, String>(emailLayout, "email_trans");
-                pairs[3] = new Pair<View, String>(passwordLayout, "password_trans");
-                pairs[4] = new Pair<View, String>(logInBtn, "button_trans");
-                pairs[5] = new Pair<View, String>(goToRegisterBtn, "goto_trans");
+                Pair[] pairs = new Pair[5];
+                pairs[0] = new Pair<View, String>(headerText, "header_text");
+                pairs[1] = new Pair<View, String>(emailLayout, "email_trans");
+                pairs[2] = new Pair<View, String>(passwordLayout, "password_trans");
+                pairs[3] = new Pair<View, String>(logInBtn, "button_trans");
+                pairs[4] = new Pair<View, String>(goToRegisterBtn, "goto_trans");
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, pairs);
 
                 startActivity(intent, options.toBundle());
@@ -143,12 +141,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                Pair[] pairs = new Pair[5];
-                pairs[0] = new Pair<View, String>(appIcon, "appIcon");
-                pairs[1] = new Pair<View, String>(headerText, "header_text");
-                pairs[2] = new Pair<View, String>(emailLayout, "email_trans");
-                pairs[3] = new Pair<View, String>(logInBtn, "button_trans");
-                pairs[4] = new Pair<View, String>(goToRegisterBtn, "goto_trans");
+                Pair[] pairs = new Pair[4];
+                pairs[0] = new Pair<View, String>(headerText, "header_text");
+                pairs[1] = new Pair<View, String>(emailLayout, "email_trans");
+                pairs[2] = new Pair<View, String>(logInBtn, "button_trans");
+                pairs[3] = new Pair<View, String>(goToRegisterBtn, "goto_trans");
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, pairs);
 
                 startActivity(intent, options.toBundle());

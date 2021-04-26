@@ -2,6 +2,7 @@ package com.droidevils.hired.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -24,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private LoadingDialog loadingDialog;
-    private ImageView appIcon;
     private TextView headerText;
     private TextInputLayout emailLayout;
     private Button sendResetBtn, goToLoginBtn;
@@ -33,11 +33,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
         loadingDialog = new LoadingDialog(ForgotPasswordActivity.this);
-        appIcon = (ImageView) findViewById(R.id.appIcon);
         headerText = (TextView) findViewById(R.id.header);
         emailLayout = (TextInputLayout) findViewById(R.id.email_layout);
         sendResetBtn = (Button) findViewById(R.id.reset_button);
@@ -81,12 +81,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                Pair[] pairs = new Pair[5];
-                pairs[0] = new Pair<View, String>(appIcon, "appIcon");
-                pairs[1] = new Pair<View, String>(headerText, "header_text");
-                pairs[2] = new Pair<View, String>(emailLayout, "email_trans");
-                pairs[3] = new Pair<View, String>(sendResetBtn, "button_trans");
-                pairs[4] = new Pair<View, String>(goToLoginBtn, "goto_trans");
+                Pair[] pairs = new Pair[4];
+                pairs[0] = new Pair<View, String>(headerText, "header_text");
+                pairs[1] = new Pair<View, String>(emailLayout, "email_trans");
+                pairs[2] = new Pair<View, String>(sendResetBtn, "button_trans");
+                pairs[3] = new Pair<View, String>(goToLoginBtn, "goto_trans");
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ForgotPasswordActivity.this, pairs);
 
                 startActivity(intent, options.toBundle());

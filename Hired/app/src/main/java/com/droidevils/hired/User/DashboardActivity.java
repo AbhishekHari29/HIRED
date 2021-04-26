@@ -2,11 +2,13 @@ package com.droidevils.hired.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -39,6 +41,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
@@ -164,5 +167,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         categoryRecycler.setAdapter(categoryAdapter);
     }
 
+    public void gotoProfileSetupActivity(View view){
+        Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+        startActivity(intent);
+    }
 
 }
