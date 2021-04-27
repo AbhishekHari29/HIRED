@@ -83,7 +83,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -231,13 +235,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/school_name_layout"
+                    android:id="@+id/institution_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/element_margin_bottom"
-                    android:contentDescription="@string/education_school"
-                    android:hint="@string/education_school">
+                    android:contentDescription="@string/education_institution"
+                    android:hint="@string/education_institution">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

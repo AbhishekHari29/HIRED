@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.droidevils.hired.R;
+import com.droidevils.hired.User.DashboardActivity;
 import com.droidevils.hired.User.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(com.droidevils.hired.Common.SplashActivity.this, LoginActivity.class);
+                Intent intent = new Intent(com.droidevils.hired.Common.SplashActivity.this, DashboardActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -14,11 +14,11 @@ import com.droidevils.hired.R;
 
 import java.util.ArrayList;
 
-public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     ArrayList<CategoryHelper> categories;
 
-    public CategoryAdaptor(ArrayList<CategoryHelper> categories) {
+    public CategoryAdapter(ArrayList<CategoryHelper> categories) {
         this.categories = categories;
     }
 

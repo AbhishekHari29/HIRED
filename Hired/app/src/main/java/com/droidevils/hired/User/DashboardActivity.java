@@ -11,18 +11,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.droidevils.hired.Helper.DashboardAdapter.CategoryAdaptor;
+import com.droidevils.hired.Helper.DashboardAdapter.CategoryAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.CategoryHelper;
 import com.droidevils.hired.Helper.DashboardAdapter.FeaturedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.MostViewedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.ServiceHelper;
 import com.droidevils.hired.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -39,11 +43,26 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     NavigationView navigationView;
     LinearLayout contentView;
 
+    //Firebase
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        //Check If user is Logged in
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Welcome Back !", Toast.LENGTH_LONG).show();
+        }
 
         featuredServiceRecycler = findViewById(R.id.featured_service_recycler);
         mostViewedRecycler = findViewById(R.id.most_viewed_recycler);
@@ -54,6 +73,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         //Menu
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
+        navigationView.setCheckedItem(R.id.nav_home);
+
+        //Control Menu Items
+        Menu navigationMenu = navigationView.getMenu();
+        navigationMenu.findItem(R.id.nav_login).setVisible(false);
+        navigationMenu.findItem(R.id.nav_signup).setVisible(false);
 
         //Navigation Drawer
         navigationDrawer();
@@ -118,11 +143,23 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-
+        switch (item.getItemId()) {
+            case R.id.nav_profile:
+                Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_logout:
+                mAuth.signOut();
+                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginIntent);
+                finish();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    //Recycler View
     private void featuredServiceRecycler() {
         featuredServiceRecycler.setHasFixedSize(true);
         featuredServiceRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -163,11 +200,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Social", gradient2));
         categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Education", gradient3));
 
-        categoryAdapter = new CategoryAdaptor(categoryHelpers);
+        categoryAdapter = new CategoryAdapter(categoryHelpers);
         categoryRecycler.setAdapter(categoryAdapter);
     }
 
-    public void gotoProfileSetupActivity(View view){
+    public void gotoProfileSetupActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
         startActivity(intent);
     }
