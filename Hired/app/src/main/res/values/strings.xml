@@ -11,6 +11,28 @@
     <string name="dummy_description">asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas</string>
     <string name="app_slogan">The opposite of Fired. Literally!</string>
     <string name="developer_credits">Created by DroidDevils</string>
+    <string name="address">Address</string>
+    <string name="pin_code">PIN Code</string>
+    <string name="gender">Gender</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email_address">Email Address</string>
+    <string name="full_name">Full Name</string>
+    <string name="personal_summary">Personal Summary</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="education_field">Field</string>
+    <string name="education_degree">Degree</string>
+    <string name="education_school">School</string>
+    <string name="city">City</string>
+    <string name="education_state">State</string>
+    <string name="graduation_date">Graduation Date</string>
+    <string name="job_title">Job Title</string>
+    <string name="job_company">Company</string>
+    <string name="job_location">Location</string>
+    <string name="work_experience">Experience</string>
+    <string name="job_description">Job Description</string>
+    <string name="finish">Finish</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
     <string-array name="gender">
         <item>Male</item>
@@ -21,4 +43,20 @@
         <item>Individual</item>
         <item>Organisation</item>
     </string-array>
+    <string-array name="degree">
+        <item>Phd</item>
+        <item>Mtech</item>
+        <item>ME</item>
+        <item>MBA</item>
+        <item>MSc</item>
+        <item>MA</item>
+        <item>Btech</item>
+        <item>BE</item>
+        <item>BBA</item>
+        <item>BSc</item>
+        <item>BA</item>
+        <item>High School</item>
+        <item>Uneducated</item>
+    </string-array>
+
 </resources>

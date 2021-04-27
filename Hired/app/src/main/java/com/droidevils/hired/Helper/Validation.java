@@ -57,7 +57,7 @@ public class Validation {
     public static boolean validateDropDown(TextInputLayout layout, AutoCompleteTextView atv){
         String value = atv.getText().toString().trim();
         if (value.isEmpty() || value.equals("")){
-            layout.setError("Select User Type");
+            layout.setError("Select "+layout.getContentDescription());
             return false;
         }
         else {
@@ -83,5 +83,26 @@ public class Validation {
             layout2.setErrorEnabled(false);
             return true;
         }
+    }
+
+    public static boolean validatePhone(View view) {
+        TextInputLayout layout = (TextInputLayout) view;
+        String value = layout.getEditText().getText().toString().trim();
+        if (!validateEmpty(view)){
+            return false;
+        } else if (!Patterns.PHONE.matcher(value).matches()){
+            layout.setError("Invalid Phone Number");
+            return false;
+        }
+        else {
+            layout.setError(null);
+            layout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    public static boolean validateDate(View view) {
+        /* TODO Validate Date */
+        return true;
     }
 }

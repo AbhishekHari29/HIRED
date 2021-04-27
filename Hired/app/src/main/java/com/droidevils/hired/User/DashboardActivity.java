@@ -96,7 +96,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         //Add any color or remove it to use the default one!
         //To make it transparent use Color.Transparent in side setScrimColor();
         //drawerLayout.setScrimColor(Color.TRANSPARENT);
-        drawerLayout.setScrimColor(getResources().getColor(R.color.blue_200));
+        drawerLayout.setScrimColor(getColor(R.color.blue_200));
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {

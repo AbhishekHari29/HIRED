@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/muli_black"
             android:text="Profile"
+            android:textAllCaps="true"
             android:textColor="#000"
             android:textSize="32sp"
             android:transitionName="header_text" />
@@ -41,15 +42,27 @@
                 android:id="@+id/profile1_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/muli"
+                    android:text="User Details"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fullname_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Full Name"
-                    android:hint="Full Name">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/full_name"
+                    android:hint="@string/full_name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -62,8 +75,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Email Address"
-                    android:hint="Email Address"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/email_address"
+                    android:hint="@string/email_address"
                     android:transitionName="email_trans">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -71,6 +85,100 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phone_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/phone_number"
+                    android:hint="@string/phone_number">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gender_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/gender"
+                    android:hint="@string/gender">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/gender_atv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dob_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/date_of_birth"
+                    android:hint="@string/date_of_birth">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pincode_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/pin_code"
+                    android:hint="@string/pin_code">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/address_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/address"
+                    android:hint="@string/address">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="textMultiLine"
+                        android:lines="3" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/personal_summary_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/personal_summary"
+                    android:hint="@string/personal_summary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="textMultiLine"
+                        android:lines="3" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -81,34 +189,115 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/muli"
+                    android:text="Education"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/phone_layout"
+                    android:id="@+id/education_field_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Phone Number"
-                    android:hint="Phone Number">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/education_field"
+                    android:hint="@string/education_field">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/usertype_layout"
+                    android:id="@+id/degree_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="User Type"
-                    android:hint="User Type">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/education_degree"
+                    android:hint="@string/education_degree">
 
                     <AutoCompleteTextView
-                        android:id="@+id/usertype_atv"
+                        android:id="@+id/degree_atv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/school_name_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/education_school"
+                    android:hint="@string/education_school">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/education_city_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/city"
+                    android:hint="@string/city">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/education_state_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/education_state"
+                    android:hint="@string/education_state">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/grad_date_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/graduation_date"
+                    android:hint="@string/graduation_date">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/still_studying_checkbox"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Still Studing" />
 
             </LinearLayout>
 
@@ -119,35 +308,99 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/muli"
+                    android:text="Work Experience"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/password_layout"
+                    android:id="@+id/job_title_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Password"
-                    android:hint="Enter Password"
-                    android:transitionName="password_trans"
-                    app:passwordToggleEnabled="true">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/job_title"
+                    android:hint="@string/job_title">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/cpassword_layout"
+                    android:id="@+id/company_name_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Password"
-                    android:hint="Confirm Password"
-                    app:passwordToggleEnabled="true">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/job_company"
+                    android:hint="@string/job_company">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/job_location_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/job_location"
+                    android:hint="@string/job_location">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/job_expyear_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/work_experience"
+                    android:hint="@string/work_experience">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/still_working_checkbox"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Still Working" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/job_desc_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/job_description"
+                    android:hint="@string/job_description">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:gravity="start"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -167,8 +420,8 @@
                     android:layout_weight="1"
                     android:background="#000"
                     android:fontFamily="@font/muli_black"
-                    android:text="Previous"
-                    android:onClick="onNextPreviousClick"
+                    android:onClick="onPreviousClick"
+                    android:text="@string/previous"
                     android:textColor="#fff"
                     android:transitionName="button_trans" />
 
@@ -182,8 +435,8 @@
                     android:layout_weight="1"
                     android:background="#000"
                     android:fontFamily="@font/muli_black"
-                    android:text="Next"
-                    android:onClick="onNextPreviousClick"
+                    android:onClick="onNextClick"
+                    android:text="@string/next"
                     android:textColor="#fff"
                     android:transitionName="button_trans" />
 

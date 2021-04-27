@@ -1,6 +1,6 @@
 package com.droidevils.hired.Helper;
 
-public class User {
+public class UserBean {
     private String fullName;
     private String emailId;
     private String phoneNumber;
@@ -9,10 +9,10 @@ public class User {
     private String createdAt;
 
 
-    public User() {
+    public UserBean() {
     }
 
-    public User(String fullName, String emailId, String phoneNumber, String password, String userType, String createdAt) {
+    public UserBean(String fullName, String emailId, String phoneNumber, String password, String userType, String createdAt) {
         this.fullName = fullName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;

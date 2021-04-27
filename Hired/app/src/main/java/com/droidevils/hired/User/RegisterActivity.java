@@ -12,12 +12,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidevils.hired.Common.LoadingDialog;
-import com.droidevils.hired.Helper.User;
+import com.droidevils.hired.Helper.UserBean;
 import com.droidevils.hired.Helper.Validation;
 import com.droidevils.hired.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -94,9 +93,9 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            User user = new User(fullName, email, phone, password, userType, createdAt);
+                            UserBean userBean = new UserBean(fullName, email, phone, password, userType, createdAt);
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-                            reference.child(currentUser.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            reference.child(currentUser.getUid()).setValue(userBean).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
