@@ -145,7 +145,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_profile:
-                Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_logout:
@@ -209,4 +209,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         startActivity(intent);
     }
 
+    public void gotoProfileActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(intent);
+    }
 }

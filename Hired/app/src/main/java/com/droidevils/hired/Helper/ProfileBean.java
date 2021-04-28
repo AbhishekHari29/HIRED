@@ -2,8 +2,9 @@ package com.droidevils.hired.Helper;
 
 public class ProfileBean {
 
-    private String fullName, email, phone, gender,birthDate, pincode, address, summary;
-    private String field, degree, institution, city, state, graduationDate;
+    private String fullName, email, phone, summary;
+    private String gender, birthDate, address, city, state, pincode;
+    private String field, degree, institution, eduCity, eduState, graduationDate;
     private String jobTitle, company, location, jobDescription;
     private int jobExperience;
     private boolean stillStudying, stillWorking;
@@ -59,6 +60,22 @@ public class ProfileBean {
         this.address = address;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getSummary() {
         return summary;
     }
@@ -91,20 +108,20 @@ public class ProfileBean {
         this.institution = institution;
     }
 
-    public String getCity() {
-        return city;
+    public String getEduCity() {
+        return eduCity;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setEduCity(String eduCity) {
+        this.eduCity = eduCity;
     }
 
-    public String getState() {
-        return state;
+    public String getEduState() {
+        return eduState;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setEduState(String eduState) {
+        this.eduState = eduState;
     }
 
     public String getJobTitle() {

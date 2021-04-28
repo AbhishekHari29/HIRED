@@ -15,10 +15,15 @@
         android:padding="20dp"
         tools:context=".User.ProfileSetupActivity">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="80dp" />
+<!--        <ImageView-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:src="@drawable/back_button"/>-->
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
 
         <TextView
             android:id="@+id/header"
@@ -26,6 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/muli_black"
             android:text="Profile"
+            android:layout_marginTop="50dp"
             android:textAllCaps="true"
             android:textColor="#000"
             android:textSize="32sp"
@@ -39,7 +45,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/profile1_layout"
+                android:id="@+id/profile0_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -50,10 +56,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/muli"
-                    android:text="User Details"
+                    android:text="Account"
                     android:textAllCaps="true"
                     android:textColor="#000"
                     android:textSize="18sp" />
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:onClick="updateProfilePicture"
+                    android:src="@drawable/profile_preview"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:civ_border_width="4dp"
+                    app:civ_shadow="true"
+                    app:civ_shadow_radius="2dp"
+                    app:civ_shadow_color="#3f51b5"/>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fullname_layout"
@@ -106,6 +127,42 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/personal_summary_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/personal_summary"
+                    android:hint="@string/personal_summary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:inputType="textMultiLine"
+                        android:lines="3" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profile1_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/muli"
+                    android:text="Personal"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/gender_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
@@ -135,20 +192,7 @@
                         android:inputType="none"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/pincode_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/element_margin_bottom"
-                    android:contentDescription="@string/pin_code"
-                    android:hint="@string/pin_code">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number" />
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/address_layout"
@@ -168,21 +212,49 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/personal_summary_layout"
+                    android:id="@+id/city_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/personal_summary"
-                    android:hint="@string/personal_summary">
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/city"
+                    android:hint="@string/city">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:inputType="textMultiLine"
-                        android:lines="3" />
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/state_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/state"
+                    android:hint="@string/state">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pincode_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/element_margin_bottom"
+                    android:contentDescription="@string/pin_code"
+                    android:hint="@string/pin_code">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -270,8 +342,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/element_margin_bottom"
-                    android:contentDescription="@string/education_state"
-                    android:hint="@string/education_state">
+                    android:contentDescription="@string/state"
+                    android:hint="@string/state">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

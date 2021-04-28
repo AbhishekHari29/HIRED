@@ -23,7 +23,7 @@
     <string name="education_degree">Degree</string>
     <string name="education_institution">Institution</string>
     <string name="city">City</string>
-    <string name="education_state">State</string>
+    <string name="state">State</string>
     <string name="graduation_date">Graduation Date</string>
     <string name="job_title">Job Title</string>
     <string name="job_company">Company</string>
@@ -59,4 +59,14 @@
         <item>Uneducated</item>
     </string-array>
 
+
+    <!--    Profile Values-->
+    <string name="job_success">Job Success</string>
+    <string name="ui_ux_designer">UI/UX Designer</string>
+    <string name="my_desc">Doing at the sweet spot between aesthetics and elegance to give life to your brand.My opinion belong to nobody but myself.</string>
+    <string name="about_me">About Me</string>
+    <string name="contact">Contact</string>
+    <string name="skills">Skills</string>
+    <string name="ratings">Star Ratings</string>
+    <string name="samplereview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium bibendum sapien, ut euismod massa. Duis convallis sem sed turpis elementum auctor.</string>
 </resources>

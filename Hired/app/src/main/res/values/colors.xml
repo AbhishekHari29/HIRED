@@ -20,4 +20,11 @@
     <color name="card2">#7adccf</color>
     <color name="card3">#f7c59f</color>
     <color name="card4">#b8d7f5</color>
+
+    <!--    Profile-->
+    <color name="grey">#E9EAEE</color>
+    <color name="yellow">#F8BA0F</color>
+    <color name="goodgrey">#535353</color>
+    <color name="blue">#293859</color>
+    <color name="lightgrey">#EEEEEE</color>
 </resources>

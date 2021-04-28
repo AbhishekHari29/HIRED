@@ -28,7 +28,37 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d257822-6df4-4713-a98b-8989f8b6e672" name="Default Changelist" comment="Profile UI">
+    <list default="true" id="5d257822-6df4-4713-a98b-8989f8b6e672" name="Default Changelist" comment="Profile Update FireBase, Menu Navigation">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/User/ProfileActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/android.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/back_button.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/circleyellowfil.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/circular_grey_bordersolid.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/circularbordersolid.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/circularbordersolid_blue.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_arrow_back_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_arrow_back_black_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_bg.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_call_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_email_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_location_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_notifications_white_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/menu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/paintbrush.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/person1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/person2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/person3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/playstore.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pp.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/profile_preview.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/profile_preview1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/star.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/tickcircle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/tickinsidecircle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/font/proximanovaregular.otf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/fileHashes/fileHashes.bin" afterDir="false" />
@@ -39,14 +69,20 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.5/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.5/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/Hired.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/Hired.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Common/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Common/SplashActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Helper/DashboardAdapter/CategoryAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Helper/DashboardAdapter/CategoryAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Helper/ProfileBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/Helper/ProfileBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/User/DashboardActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/User/DashboardActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/User/ProfileSetupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/droidevils/hired/User/ProfileSetupActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile_setup.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile_setup.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,8 +130,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="android.template.691103626">
+      <recent name="com.droidevils.hired.User" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Projects\Android_Projects\HIRED\Hired\app\src\main\res\drawable" />
+      <recent name="C:\Projects\Android_Projects\HIRED\Hired\app\src\main\res\font" />
       <recent name="C:\Projects\Android_Projects\HIRED\Hired\app\src\main\res\drawable-v24" />
     </key>
     <key name="android.template.1593518168">
@@ -189,7 +229,21 @@
       <option name="project" value="LOCAL" />
       <updated>1619504521483</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Profile Update FireBase, Menu Navigation">
+      <created>1619518371397</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1619518371397</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Profile Update FireBase, Menu Navigation">
+      <created>1619518396542</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1619518396542</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -217,13 +271,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Profile UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Profile UI" />
+    <MESSAGE value="Profile Update FireBase, Menu Navigation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Profile Update FireBase, Menu Navigation" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="574" y="154" key="#com.intellij.ide.util.MemberChooser" timestamp="1619509907124">
+    <state x="574" y="154" key="#com.intellij.ide.util.MemberChooser" timestamp="1619533262700">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state x="574" y="154" key="#com.intellij.ide.util.MemberChooser/0.30.1536.834@0.30.1536.834" timestamp="1619509907124" />
+    <state x="574" y="154" key="#com.intellij.ide.util.MemberChooser/0.30.1536.834@0.30.1536.834" timestamp="1619533262700" />
     <state x="455" y="30" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1619504144176">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
@@ -232,10 +287,10 @@
       <screen x="0" y="30" width="1536" height="834" />
     </state>
     <state x="499" y="194" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.30.1536.834@0.30.1536.834" timestamp="1619439584421" />
-    <state x="93" y="123" width="1350" height="648" key="AVDManager" timestamp="1619501195360">
+    <state x="93" y="123" width="1350" height="648" key="AVDManager" timestamp="1619596333517">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state x="93" y="123" width="1350" height="648" key="AVDManager/0.30.1536.834@0.30.1536.834" timestamp="1619501195360" />
+    <state x="93" y="123" width="1350" height="648" key="AVDManager/0.30.1536.834@0.30.1536.834" timestamp="1619596333517" />
     <state x="349" y="202" key="AndroidCreateResourceFileDialog" timestamp="1619448032035">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
@@ -248,34 +303,34 @@
       <screen x="0" y="30" width="1536" height="834" />
     </state>
     <state x="93" y="123" width="1350" height="648" key="DiffContextDialog/0.30.1536.834@0.30.1536.834" timestamp="1619505060211" />
-    <state x="549" y="202" key="FileChooserDialogImpl" timestamp="1619441069016">
+    <state x="549" y="202" key="FileChooserDialogImpl" timestamp="1619598167652">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state x="549" y="202" key="FileChooserDialogImpl/0.30.1536.834@0.30.1536.834" timestamp="1619441069016" />
-    <state width="1491" height="250" key="GridCell.Tab.0.bottom" timestamp="1619513970629">
+    <state x="549" y="202" key="FileChooserDialogImpl/0.30.1536.834@0.30.1536.834" timestamp="1619598167652" />
+    <state width="1491" height="213" key="GridCell.Tab.0.bottom" timestamp="1619601735377">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state width="1491" height="250" key="GridCell.Tab.0.bottom/0.30.1536.834@0.30.1536.834" timestamp="1619513970629" />
-    <state width="1491" height="250" key="GridCell.Tab.0.center" timestamp="1619513970628">
+    <state width="1491" height="213" key="GridCell.Tab.0.bottom/0.30.1536.834@0.30.1536.834" timestamp="1619601735377" />
+    <state width="1491" height="213" key="GridCell.Tab.0.center" timestamp="1619601735377">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state width="1491" height="250" key="GridCell.Tab.0.center/0.30.1536.834@0.30.1536.834" timestamp="1619513970628" />
-    <state width="1491" height="250" key="GridCell.Tab.0.left" timestamp="1619513970628">
+    <state width="1491" height="213" key="GridCell.Tab.0.center/0.30.1536.834@0.30.1536.834" timestamp="1619601735377" />
+    <state width="1491" height="213" key="GridCell.Tab.0.left" timestamp="1619601735377">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state width="1491" height="250" key="GridCell.Tab.0.left/0.30.1536.834@0.30.1536.834" timestamp="1619513970628" />
-    <state width="1491" height="250" key="GridCell.Tab.0.right" timestamp="1619513970629">
+    <state width="1491" height="213" key="GridCell.Tab.0.left/0.30.1536.834@0.30.1536.834" timestamp="1619601735377" />
+    <state width="1491" height="213" key="GridCell.Tab.0.right" timestamp="1619601735377">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state width="1491" height="250" key="GridCell.Tab.0.right/0.30.1536.834@0.30.1536.834" timestamp="1619513970629" />
+    <state width="1491" height="213" key="GridCell.Tab.0.right/0.30.1536.834@0.30.1536.834" timestamp="1619601735377" />
     <state x="277" y="92" key="SettingsEditor" timestamp="1619500959956">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
     <state x="277" y="92" key="SettingsEditor/0.30.1536.834@0.30.1536.834" timestamp="1619500959956" />
-    <state x="584" y="225" key="chooseDestDirectoryDialog" timestamp="1618815237783">
+    <state x="584" y="225" key="chooseDestDirectoryDialog" timestamp="1619531625180">
       <screen x="0" y="30" width="1536" height="834" />
     </state>
-    <state x="584" y="225" key="chooseDestDirectoryDialog/0.30.1536.834@0.30.1536.834" timestamp="1618815237783" />
+    <state x="584" y="225" key="chooseDestDirectoryDialog/0.30.1536.834@0.30.1536.834" timestamp="1619531625180" />
     <state x="471" y="256" key="com.android.tools.idea.run.deployment.ModifyDeviceSetDialog" timestamp="1619501095146">
       <screen x="0" y="30" width="1536" height="834" />
     </state>

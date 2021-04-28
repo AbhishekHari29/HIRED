@@ -1,10 +1,12 @@
 package com.droidevils.hired.User;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,15 +45,20 @@ import java.util.TimeZone;
 
 public class ProfileSetupActivity extends AppCompatActivity {
 
+    private final int PICK_IMAGE = 1;
+
     //Form Navigation
-    private final int numberOfTab = 3;
+    private final int numberOfTab = 4;
     private int currentTab = 0;
     private LinearLayout[] profileTabs;
     private Button nextButton, previousButton;
 
     //Form Input Elements
-    private TextInputLayout fullName, email, phone, gender, birthDate, pincode, address, summary;
-    private TextInputLayout field, degree, institution, city, state, graduationDate;
+    private Uri profileImageUri;
+    private CircularImageView profileImage;
+    private TextInputLayout fullName, email, phone, summary;
+    private TextInputLayout gender, birthDate, address, city, state, pincode;
+    private TextInputLayout field, degree, institution, eduCity, eduState, graduationDate;
     private TextInputLayout jobTitle, jobCompany, jobLocation, jobExperience, jobDesc;
     private AutoCompleteTextView genderAtv, degreeAtv;
     private CheckBox stillStudying, stillWorking;
@@ -57,6 +69,8 @@ public class ProfileSetupActivity extends AppCompatActivity {
     private FirebaseDatabase rootNode;
     private DatabaseReference userReference, profileReference;
     private FirebaseUser currentUser;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
     UserBean currentUserBean;
 
     private LoadingDialog loadingDialog;
@@ -70,24 +84,29 @@ public class ProfileSetupActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(ProfileSetupActivity.this);
 
         //Form Input Elements
-        //Personal
+        //Account
+        profileImage = findViewById(R.id.profile_image);
         fullName = findViewById(R.id.fullname_layout);
         email = findViewById(R.id.email_layout);
+        phone = findViewById(R.id.phone_layout);
+        summary = findViewById(R.id.personal_summary_layout);
+
+        //Personal
         gender = findViewById(R.id.gender_layout);
         genderAtv = findViewById(R.id.gender_atv);
-        phone = findViewById(R.id.phone_layout);
         birthDate = findViewById(R.id.dob_layout);
-        pincode = findViewById(R.id.pincode_layout);
         address = findViewById(R.id.address_layout);
-        summary = findViewById(R.id.personal_summary_layout);
+        city = findViewById(R.id.city_layout);
+        state = findViewById(R.id.state_layout);
+        pincode = findViewById(R.id.pincode_layout);
 
         //Education
         field = findViewById(R.id.education_field_layout);
         degree = findViewById(R.id.degree_layout);
         degreeAtv = findViewById(R.id.degree_atv);
         institution = findViewById(R.id.institution_layout);
-        city = findViewById(R.id.education_city_layout);
-        state = findViewById(R.id.education_state_layout);
+        eduCity = findViewById(R.id.education_city_layout);
+        eduState = findViewById(R.id.education_state_layout);
         graduationDate = findViewById(R.id.grad_date_layout);
         stillStudying = findViewById(R.id.still_studying_checkbox);
 
@@ -101,9 +120,10 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
         // Form navigation
         profileTabs = new LinearLayout[numberOfTab];
-        profileTabs[0] = findViewById(R.id.profile1_layout);
-        profileTabs[1] = findViewById(R.id.profile2_layout);
-        profileTabs[2] = findViewById(R.id.profile3_layout);
+        profileTabs[0] = findViewById(R.id.profile0_layout);
+        profileTabs[1] = findViewById(R.id.profile1_layout);
+        profileTabs[2] = findViewById(R.id.profile2_layout);
+        profileTabs[3] = findViewById(R.id.profile3_layout);
         nextButton = findViewById(R.id.next_button);
         previousButton = findViewById(R.id.previous_button);
 
@@ -121,6 +141,9 @@ public class ProfileSetupActivity extends AppCompatActivity {
         profileReference = rootNode.getReference("Profile");
         userReference = rootNode.getReference("User");
         currentUser = mAuth.getCurrentUser();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
         userReference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -137,55 +160,50 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
-    private void initGradDateDatePicker() {
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select Graduation Date");
-        graduationDatePicker = builder.build();
-        graduationDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Long value = Long.valueOf(selection.toString());
-                Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                utc.setTimeInMillis(value);
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                String formatted = format.format(utc.getTime());
-                graduationDate.getEditText().setText(formatted);
-            }
-        });
-        graduationDate.getEditText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                graduationDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-            }
-        });
+    public void updateProfilePicture(View view) {
+        Intent pickImageIntent = new Intent();
+        pickImageIntent.setAction(Intent.ACTION_GET_CONTENT);
+        pickImageIntent.setType("image/*");
+        startActivityForResult(pickImageIntent, PICK_IMAGE);
     }
 
-    private void initBirthDatePicker() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            CropImage.activity(data.getData())
+                    .setAspectRatio(1, 1)
+                    .start(this);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                profileImageUri = result.getUri();
+                profileImage.setImageURI(profileImageUri);
+                uploadProfileImageToFirebase();
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select Date of Birth");
-        birthDatePicker = builder.build();
-        birthDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Long value = Long.valueOf(selection.toString());
-                Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                utc.setTimeInMillis(value);
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                String formatted = format.format(utc.getTime());
-                birthDate.getEditText().setText(formatted);
-            }
-        });
-        birthDate.getEditText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                birthDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
-            }
-        });
+    public void uploadProfileImageToFirebase(){
+        if (profileImageUri != null) {
+            StorageReference profileImageRef = storageReference.child("Profile").child(currentUser.getUid()).child("profile_image.jpg");
+            profileImageRef.putFile(profileImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()){
+                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     private void onProfileFinish() {
@@ -201,22 +219,26 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
         //Initialize Profile Bean
         ProfileBean profileBean = new ProfileBean();
-        //Personal
+        //Account
         profileBean.setFullName(fullName.getEditText().getText().toString().trim());
         profileBean.setEmail(email.getEditText().getText().toString().trim());
         profileBean.setPhone(phone.getEditText().getText().toString().trim());
-        profileBean.setGender(genderAtv.getText().toString().trim());
-        profileBean.setPincode(pincode.getEditText().getText().toString().trim());
-        profileBean.setAddress(address.getEditText().getText().toString().trim());
         profileBean.setSummary(summary.getEditText().getText().toString().trim());
+
+        //Personal
+        profileBean.setGender(genderAtv.getText().toString().trim());
         profileBean.setBirthDate(birthDate.getEditText().getText().toString().trim());
+        profileBean.setAddress(address.getEditText().getText().toString().trim());
+        profileBean.setCity(city.getEditText().getText().toString().trim());
+        profileBean.setState(state.getEditText().getText().toString().trim());
+        profileBean.setPincode(pincode.getEditText().getText().toString().trim());
 
         //Education
         profileBean.setField(field.getEditText().getText().toString().trim());
         profileBean.setDegree(degreeAtv.getText().toString().trim());
         profileBean.setInstitution(institution.getEditText().getText().toString().trim());
-        profileBean.setCity(city.getEditText().getText().toString().trim());
-        profileBean.setState(state.getEditText().getText().toString().trim());
+        profileBean.setEduCity(eduCity.getEditText().getText().toString().trim());
+        profileBean.setEduState(eduState.getEditText().getText().toString().trim());
         profileBean.setStillStudying(stillStudying.isChecked());
         profileBean.setGraduationDate(graduationDate.getEditText().getText().toString().trim());
 
@@ -227,6 +249,23 @@ public class ProfileSetupActivity extends AppCompatActivity {
         profileBean.setJobExperience(Integer.parseInt(jobExperience.getEditText().getText().toString().trim()));
         profileBean.setJobDescription(jobDesc.getEditText().getText().toString().trim());
         profileBean.setStillWorking(stillWorking.isChecked());
+
+        //TODO Upload Profile Image
+        //FIXME
+//        if (profileImageUri != null) {
+//            profileImageRef = FirebaseStorage.getInstance().getReference().child("Profile").child(currentUser.getUid()).child("profile.jpg");
+//            profileImageRef.putFile(profileImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                    if (task.isSuccessful()){
+//                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_LONG).show();
+//                    }
+//                    else {
+//                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            });
+//        }
 
         //Update User
         String fullNameString = fullName.getEditText().getText().toString().trim();
@@ -297,27 +336,81 @@ public class ProfileSetupActivity extends AppCompatActivity {
     private boolean validateCurrentTab() {
         switch (currentTab) {
             case 0:
-                return validatePersonal();
+                return validateAccount();
             case 1:
-                return validateEducation();
+                return validatePersonal();
             case 2:
+                return validateEducation();
+            case 3:
                 return validateWorkExperience();
             default:
                 return false;
         }
     }
 
+    private boolean validateAccount() {
+        return (Validation.validateEmpty(fullName) & Validation.validateEmail(email) & Validation.validatePhone(phone));
+    }
+
     private boolean validatePersonal() {
-        return (Validation.validateEmpty(fullName) & Validation.validateEmail(email) & Validation.validatePhone(phone) &
-                Validation.validateDropDown(gender, genderAtv) & Validation.validateEmpty(birthDate) & Validation.validateEmpty(pincode));
+        return (Validation.validateDropDown(gender, genderAtv) & Validation.validateEmpty(birthDate) &
+                Validation.validateEmpty(address) & Validation.validateEmpty(city) &
+                Validation.validateEmpty(state) & Validation.validateEmpty(pincode));
     }
 
     private boolean validateEducation() {
         return (Validation.validateEmpty(field) & Validation.validateDropDown(degree, degreeAtv) & Validation.validateEmpty(institution) &
-                Validation.validateEmpty(city) & Validation.validateEmpty(state) & Validation.validateEmpty(graduationDate));
+                Validation.validateEmpty(eduCity) & Validation.validateEmpty(eduState) & Validation.validateEmpty(graduationDate));
     }
 
     private boolean validateWorkExperience() {
         return true;
+    }
+
+    private void initGradDateDatePicker() {
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select Graduation Date");
+        graduationDatePicker = builder.build();
+        graduationDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Long value = Long.valueOf(selection.toString());
+                Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                utc.setTimeInMillis(value);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                String formatted = format.format(utc.getTime());
+                graduationDate.getEditText().setText(formatted);
+            }
+        });
+        graduationDate.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                graduationDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+            }
+        });
+    }
+
+    private void initBirthDatePicker() {
+
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select Date of Birth");
+        birthDatePicker = builder.build();
+        birthDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Long value = Long.valueOf(selection.toString());
+                Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                utc.setTimeInMillis(value);
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                String formatted = format.format(utc.getTime());
+                birthDate.getEditText().setText(formatted);
+            }
+        });
+        birthDate.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                birthDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
+            }
+        });
     }
 }
