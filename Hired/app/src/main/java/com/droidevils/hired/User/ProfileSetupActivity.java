@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -162,6 +163,23 @@ public class ProfileSetupActivity extends AppCompatActivity {
         });
     }
 
+    public void uploadProfileImageToFirebase() {
+        if (profileImageUri != null) {
+            StorageReference profileImageRef = storageReference.child("Profile").child(currentUser.getUid()).child("profile_image.jpg");
+            profileImageRef.putFile(profileImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
+                        Log.d("profileImage", "Image Upload Failed");
+                    }
+                }
+            });
+        }
+    }
+
     public void updateProfilePicture(View view) {
         Intent pickImageIntent = new Intent();
         pickImageIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -182,27 +200,10 @@ public class ProfileSetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 profileImageUri = result.getUri();
                 profileImage.setImageURI(profileImageUri);
-                uploadProfileImageToFirebase();
+//                uploadProfileImageToFirebase();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
-        }
-    }
-
-    public void uploadProfileImageToFirebase(){
-        if (profileImageUri != null) {
-            StorageReference profileImageRef = storageReference.child("Profile").child(currentUser.getUid()).child("profile_image.jpg");
-            profileImageRef.putFile(profileImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()){
-                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
         }
     }
 
@@ -250,23 +251,6 @@ public class ProfileSetupActivity extends AppCompatActivity {
         profileBean.setJobDescription(jobDesc.getEditText().getText().toString().trim());
         profileBean.setStillWorking(stillWorking.isChecked());
 
-        //TODO Upload Profile Image
-        //FIXME
-//        if (profileImageUri != null) {
-//            profileImageRef = FirebaseStorage.getInstance().getReference().child("Profile").child(currentUser.getUid()).child("profile.jpg");
-//            profileImageRef.putFile(profileImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                    if (task.isSuccessful()){
-//                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_LONG).show();
-//                    }
-//                    else {
-//                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            });
-//        }
-
         //Update User
         String fullNameString = fullName.getEditText().getText().toString().trim();
         String phoneNumberString = phone.getEditText().getText().toString().trim();
@@ -285,6 +269,9 @@ public class ProfileSetupActivity extends AppCompatActivity {
             });
         }
         //Upload to FireBase
+        // Profile Image
+        uploadProfileImageToFirebase();
+        // Profile Information
         profileReference.child(currentUser.getUid()).setValue(profileBean).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -391,7 +378,6 @@ public class ProfileSetupActivity extends AppCompatActivity {
     }
 
     private void initBirthDatePicker() {
-
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select Date of Birth");
         birthDatePicker = builder.build();
@@ -412,5 +398,8 @@ public class ProfileSetupActivity extends AppCompatActivity {
                 birthDatePicker.show(getSupportFragmentManager(), "DATE_PICKER");
             }
         });
+    }
+    public void goBackButton(View view){
+        onBackPressed();
     }
 }

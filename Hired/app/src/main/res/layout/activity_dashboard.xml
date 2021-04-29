@@ -14,7 +14,7 @@
         android:layout_gravity="start"
         android:background="@color/lightWhite"
         android:theme="@style/navigationTheme"
-        app:headerLayout="@layout/menu_header"
+        app:headerLayout="@layout/menu_header_new"
         app:menu="@menu/main_menu" />
 
     <LinearLayout

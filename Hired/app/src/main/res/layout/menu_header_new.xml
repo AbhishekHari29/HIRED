@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/lightWhite"
+    android:paddingTop="15dp"
+    android:paddingLeft="15dp"
+    android:paddingBottom="15dp">
+
+    <ImageView
+        android:id="@+id/menu_slogan"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/hired_square_slogan"/>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_above="@id/menu_slogan"
+        android:src="@drawable/hired_square_icon" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="150dp"
+        android:alpha="0.25"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/suitcase_half"/>
+
+</RelativeLayout>

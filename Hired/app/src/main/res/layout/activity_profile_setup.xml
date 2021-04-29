@@ -15,13 +15,14 @@
         android:padding="20dp"
         tools:context=".User.ProfileSetupActivity">
 
-<!--        <ImageView-->
-<!--            android:layout_width="32dp"-->
-<!--            android:layout_height="32dp"-->
-<!--            android:src="@drawable/back_button"/>-->
+        <!--        <ImageView-->
+        <!--            android:layout_width="32dp"-->
+        <!--            android:layout_height="32dp"-->
+        <!--            android:src="@drawable/back_button"/>-->
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:onClick="goBackButton"
             android:padding="8dp"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
@@ -29,9 +30,9 @@
             android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:fontFamily="@font/muli_black"
             android:text="Profile"
-            android:layout_marginTop="50dp"
             android:textAllCaps="true"
             android:textColor="#000"
             android:textSize="32sp"
@@ -65,15 +66,15 @@
                     android:id="@+id/profile_image"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:onClick="updateProfilePicture"
-                    android:src="@drawable/profile_preview"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:onClick="updateProfilePicture"
+                    android:src="@drawable/profile_preview"
                     app:civ_border_width="4dp"
                     app:civ_shadow="true"
-                    app:civ_shadow_radius="2dp"
-                    app:civ_shadow_color="#3f51b5"/>
+                    app:civ_shadow_color="#3f51b5"
+                    app:civ_shadow_radius="2dp" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -104,11 +105,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
                         android:clickable="false"
                         android:cursorVisible="false"
                         android:focusable="false"
-                        android:focusableInTouchMode="false"/>
+                        android:focusableInTouchMode="false"
+                        android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -186,12 +187,12 @@
                     android:layout_marginBottom="@dimen/element_margin_bottom"
                     android:contentDescription="@string/date_of_birth"
                     android:hint="@string/date_of_birth">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"/>
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
-
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -474,9 +475,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="start"
                         android:inputType="textMultiLine"
-                        android:lines="3"
-                        android:gravity="start"/>
+                        android:lines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

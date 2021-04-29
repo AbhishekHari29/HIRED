@@ -1,6 +1,10 @@
 package com.droidevils.hired.Helper;
 
 public class UserBean {
+
+    public  static final String KEY_USER_ID = "KEY_USER_ID";
+    public  static final String KEY_USER_TYPE = "KEY_USER_TYPE";
+
     private String fullName;
     private String emailId;
     private String phoneNumber;

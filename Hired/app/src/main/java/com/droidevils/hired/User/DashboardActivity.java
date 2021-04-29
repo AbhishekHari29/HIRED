@@ -23,6 +23,7 @@ import com.droidevils.hired.Helper.DashboardAdapter.CategoryHelper;
 import com.droidevils.hired.Helper.DashboardAdapter.FeaturedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.MostViewedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.ServiceHelper;
+import com.droidevils.hired.Helper.UserBean;
 import com.droidevils.hired.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -146,6 +147,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(UserBean.KEY_USER_TYPE, ProfileActivity.USER_PROFILE);
+                bundle.putString(UserBean.KEY_USER_ID, currentUser.getUid());
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.nav_logout:
