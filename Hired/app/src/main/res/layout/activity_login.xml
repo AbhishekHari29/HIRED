@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/muli_black"
             android:text="Sign In"
-            android:textAllCaps="true"
             android:textColor="#000"
             android:textSize="32sp"
             android:transitionName="header_text" />

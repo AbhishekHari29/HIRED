@@ -70,4 +70,92 @@
     <string name="ratings">Star Ratings</string>
     <string name="samplereview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium bibendum sapien, ut euismod massa. Duis convallis sem sed turpis elementum auctor.</string>
     <string name="education">Education</string>
+
+    <!--    Categories-->
+
+    <string-array name="categories">
+        <item>Health Care</item>
+        <item>Hygiene</item>
+        <item>Electronics</item>
+        <item>Software</item>
+        <item>Catering/Culinary</item>
+        <item>Outdoor Care</item>
+        <item>Personal Care</item>
+        <item>Interior</item>
+        <item>Child/Student Help</item>
+        <item>Misc</item>
+    </string-array>
+
+    <string-array name="misc">
+        <item>Grocery/Food/Pharma Delivery</item>
+        <item>Driver</item>
+        <item>Petcare</item>
+        <item>Tailoring</item>
+        <item>Photographer</item>
+    </string-array>
+    <string-array name="child_student_help">
+        <item>Babysitting</item>
+        <item>Child pickup and drop</item>
+        <item>Creche</item>
+        <item>Tuition</item>
+        <item>Counselling</item>
+    </string-array>
+    <string-array name="interior">
+        <item>Painter</item>
+        <item>Furniture Varnish/Assembly</item>
+        <item>Retrofitting</item>
+        <item>Plumbing</item>
+        <item>Woodwork</item>
+    </string-array>
+    <string-array name="personal_care">
+        <item>Massage/Spa</item>
+        <item>Therapist</item>
+        <item>Make-up</item>
+        <item>Grooming</item>
+        <item>Yoga</item>
+    </string-array>
+    <string-array name="outdoor_care">
+        <item>Vehicle Cleaning</item>
+        <item>Gardening and Landscaping</item>
+        <item>Cleaning Public Premises</item>
+        <item>Watchman </item>
+        <item>CCTV/Security Camera installation</item>
+    </string-array>
+    <string-array name="catering_culinary">
+        <item>Catering for Family</item>
+        <item>Catering for Wedding/Party/Function</item>
+        <item>Special Needs Cook</item>
+        <item>Home Cook</item>
+        <item>Home Farming</item>
+    </string-array>
+    <string-array name="software">
+        <item>Software installation</item>
+        <item>Personal Gadget Service</item>
+        <item>Internet Troubleshooting</item>
+        <item>IoT/Smart Home Service</item>
+        <item>Office IT Service </item>
+    </string-array>
+    <string-array name="electronics">
+        <item>Electrician Eervice</item>
+        <item>Fitting new applicances</item>
+        <item>Inverter/UPS</item>
+        <item>Solar Panel Installation</item>
+    </string-array>
+    <string-array name="hygiene">
+        <item>House Cleaning</item>
+        <item>Insecticide Spray</item>
+        <item>Shop/Office Sanitising</item>
+        <item>Restroom Cleaning</item>
+        <item>Laundry</item>
+    </string-array>
+    <string-array name="healthcare">
+        <item>Nursing</item>
+        <item>Mental Healthcare</item>
+        <item>Physician</item>
+        <item>Physiotherapist</item>
+        <item>Elderly Care</item>
+    </string-array>
+    
+    
+
 </resources>

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hired">
-        <activity android:name=".User.ProfileActivity"></activity>
+        <activity android:name=".User.CategoryActivity"></activity>
+        <activity android:name=".User.ProfileActivity" />
         <activity android:name=".User.ProfileSetupActivity" />
         <activity android:name=".User.ForgotPasswordActivity" />
         <activity android:name=".User.RegisterActivity" />

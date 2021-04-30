@@ -159,6 +159,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 startActivity(loginIntent);
                 finish();
                 break;
+            case R.id.nav_category:
+                Intent categoryIntent = new Intent(getApplicationContext(), CategoryActivity.class);
+                startActivity(categoryIntent);
+                finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
