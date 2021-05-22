@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidevils.hired.Common.LoadingDialog;
-import com.droidevils.hired.Helper.UserBean;
+import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.Helper.Validation;
 import com.droidevils.hired.R;
 import com.google.android.gms.tasks.OnCompleteListener;

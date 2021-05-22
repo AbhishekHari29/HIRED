@@ -8,8 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/category_list_parent"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:text="List Group"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:fontFamily="@font/muli"
         android:textColor="@color/colorAccent"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"/>
 

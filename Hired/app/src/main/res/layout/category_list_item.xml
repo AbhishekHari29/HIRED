@@ -11,8 +11,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/category_list_child"
         android:textSize="18sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:fontFamily="@font/muli"
         android:text="List Item"
         android:textColor="@color/colorAccent"
-        android:paddingLeft="30dp"/>
+        android:paddingLeft="60dp"/>
 
 </LinearLayout>

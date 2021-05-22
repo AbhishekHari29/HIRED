@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.droidevils.hired.Helper.Bean.TempMain;
 import com.droidevils.hired.R;
 import com.droidevils.hired.User.DashboardActivity;
 import com.droidevils.hired.User.LoginActivity;
@@ -32,6 +33,8 @@ public class SplashActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        new TempMain().main();
 
         appLogo = (ImageView) findViewById(R.id.app_icon);
         developerCredit = (TextView) findViewById(R.id.developer_credit);

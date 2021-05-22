@@ -3,9 +3,14 @@ package com.droidevils.hired.User;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Display;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 
+import com.droidevils.hired.Helper.Bean.Category;
+import com.droidevils.hired.Helper.Bean.CategoryInterface;
+import com.droidevils.hired.Helper.Bean.Service;
+import com.droidevils.hired.Helper.Bean.ServiceInterface;
 import com.droidevils.hired.Helper.CategoryListAdaptor;
 import com.droidevils.hired.R;
 
@@ -32,8 +37,10 @@ public class CategoryActivity extends AppCompatActivity {
         listItem = new HashMap<>();
         categoryListAdaptor = new CategoryListAdaptor(this, listGroup, listItem);
         expandableListView.setAdapter(categoryListAdaptor);
-        initListData();
-
+        Display newDisplay = getWindowManager().getDefaultDisplay();//Move dropdown icon to right
+        int width = newDisplay.getWidth();
+        expandableListView.setIndicatorBounds(width-200, width);
+        initializeCategoryList();
     }
 
     private void initListData() {
@@ -62,6 +69,28 @@ public class CategoryActivity extends AppCompatActivity {
 
         }
         categoryListAdaptor.notifyDataSetChanged();
-
     }
+
+    private void initializeCategoryList() {
+        Category.getAllCategory(new CategoryInterface() {
+            @Override
+            public void getAllCategory(ArrayList<Category> categories) {
+                for (Category category : categories) {
+                    listGroup.add(category.getCategoryName());
+                    Service.getServiceByCategory(category.getCategoryId(), new ServiceInterface() {
+                        @Override
+                        public void getServiceByCategory(ArrayList<Service> services) {
+                            ArrayList<String> serviceNames = new ArrayList<>();
+                            for (Service service : services)
+                                serviceNames.add(service.getServiceName());
+                            listItem.put(category.getCategoryName(), serviceNames);
+
+                        }
+                    });
+                }
+                categoryListAdaptor.notifyDataSetChanged();
+            }
+        });
+    }
+
 }

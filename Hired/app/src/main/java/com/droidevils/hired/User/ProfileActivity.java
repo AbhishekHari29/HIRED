@@ -11,10 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.droidevils.hired.Helper.ProfileBean;
-import com.droidevils.hired.Helper.UserBean;
+import com.droidevils.hired.Helper.Bean.ProfileBean;
+import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

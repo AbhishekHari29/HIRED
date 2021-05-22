@@ -7,13 +7,12 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:padding="0dp"
     tools:context=".User.CategoryActivity">
 
     <TextView
         android:id="@+id/header"
-        android:paddingTop="40dp"
-        android:paddingBottom="20dp"
+        android:padding="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/muli_black"

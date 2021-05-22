@@ -23,7 +23,7 @@ import com.droidevils.hired.Helper.DashboardAdapter.CategoryHelper;
 import com.droidevils.hired.Helper.DashboardAdapter.FeaturedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.MostViewedServiceAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.ServiceHelper;
-import com.droidevils.hired.Helper.UserBean;
+import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
