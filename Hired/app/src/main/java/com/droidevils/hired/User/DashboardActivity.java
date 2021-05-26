@@ -14,10 +14,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droidevils.hired.Helper.Bean.Category;
+import com.droidevils.hired.Helper.Bean.CategoryInterface;
 import com.droidevils.hired.Helper.DashboardAdapter.CategoryAdapter;
 import com.droidevils.hired.Helper.DashboardAdapter.CategoryHelper;
 import com.droidevils.hired.Helper.DashboardAdapter.FeaturedServiceAdapter;
@@ -146,12 +151,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_profile:
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(UserBean.KEY_USER_TYPE, ProfileActivity.USER_PROFILE);
-                bundle.putString(UserBean.KEY_USER_ID, currentUser.getUid());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                gotoProfileActivity(new View(this));
                 break;
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -160,12 +160,32 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 finish();
                 break;
             case R.id.nav_category:
-                Intent categoryIntent = new Intent(getApplicationContext(), CategoryActivity.class);
-                startActivity(categoryIntent);
-                finish();
+                gotoCategoryActivity(new View(this));
+                break;
+            case R.id.nav_search:
+                gotoSearchActivity(new View(this));
+                break;
+            case R.id.nav_category1:
+                Intent serviceAddIntent = new Intent(getApplicationContext(), ServiceUpdateActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_MODIFY);
+                bundle.putString(ServiceUpdateActivity.SERVICE_ID, "102008");
+                serviceAddIntent.putExtras(bundle);
+                startActivity(serviceAddIntent);
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void gotoSearchActivity(View view) {
+        Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
+        startActivity(searchIntent);
+    }
+
+    public void gotoCategoryActivity(View view) {
+        Intent categoryIntent = new Intent(getApplicationContext(), CategoryActivity.class);
+        startActivity(categoryIntent);
     }
 
     //Recycler View
@@ -199,27 +219,67 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         categoryRecycler.setHasFixedSize(true);
         categoryRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        GradientDrawable gradient1 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xff7adccf, 0xff7adccf});
-        GradientDrawable gradient2 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xffd4cbe5, 0xffd4cbe5});
-        GradientDrawable gradient3 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xfff7c59f, 0xFFf7c59f});
-        GradientDrawable gradient4 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xffb8d7f5, 0xffb8d7f5});
+        GradientDrawable[] gradientDrawables = new GradientDrawable[4];
 
-        ArrayList<CategoryHelper> categoryHelpers = new ArrayList<>();
-        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Marketing", gradient1));
-        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Social", gradient2));
-        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Education", gradient3));
+        gradientDrawables[0] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xff7adccf, 0xff7adccf});
+        gradientDrawables[1] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xffd4cbe5, 0xffd4cbe5});
+        gradientDrawables[2] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xfff7c59f, 0xFFf7c59f});
+        gradientDrawables[3] = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{0xffb8d7f5, 0xffb8d7f5});
 
-        categoryAdapter = new CategoryAdapter(categoryHelpers);
-        categoryRecycler.setAdapter(categoryAdapter);
+        Category.getAllCategory(new CategoryInterface() {
+            @Override
+            public void getAllCategory(ArrayList<Category> categories) {
+                int gradientIndex = 0;
+                int gradientLength = gradientDrawables.length;
+                if (categories != null && categories.size() > 0) {
+                    ArrayList<CategoryHelper> categoryHelpers = new ArrayList<>();
+                    for (Category category:categories)
+                        categoryHelpers.add(new CategoryHelper(R.drawable.chat, category.getCategoryName()+"::"+category.getCategoryId(), gradientDrawables[(gradientIndex++)%gradientLength]));
+                    categoryAdapter = new CategoryAdapter(categoryHelpers);
+                    categoryRecycler.setAdapter(categoryAdapter);
+                }
+            }
+        });
+
+
+//        ArrayList<CategoryHelper> categoryHelpers = new ArrayList<>();
+//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Marketing", gradient1));
+//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Social", gradient2));
+//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Education", gradient3));
+//
+//        categoryAdapter = new CategoryAdapter(categoryHelpers);
+//        categoryRecycler.setAdapter(categoryAdapter);
     }
 
     public void gotoProfileSetupActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_MODIFY);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     public void gotoProfileActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ProfileActivity.PROFILE_TYPE, ProfileActivity.USER_PROFILE);
+        intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    public void onClickCategory(View view) {
+//        ViewGroup viewGroup = (ViewGroup) view;
+//        String categoryId = viewGroup.getContentDescription().toString();
+
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.CATEGORY_SEARCH);
+        bundle.putString(SearchActivity.CATEGORY_SEARCH, view.getContentDescription().toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+
+//        TextView textView = (TextView) viewGroup.getChildAt(0);
+//        Toast.makeText(getApplicationContext(), "Category Clicked:" + viewGroup.getContentDescription(), Toast.LENGTH_SHORT).show();
     }
 }

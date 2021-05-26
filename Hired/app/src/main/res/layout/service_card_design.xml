@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:onClick="onClickService"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/service_image"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/service1" />
+
+        <TextView
+            android:id="@+id/service_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/service_image"
+            android:fontFamily="@font/muli_black"
+            android:text="Service Name"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp" />
+
+        <RatingBar
+            android:id="@+id/service_rating"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_title"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/service_image"
+            android:rating="4" />
+
+        <TextView
+            android:id="@+id/service_availability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_rating"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@id/service_image"
+            android:text="Availabilty" />
+
+        <ImageView
+            android:id="@+id/service_availability_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_rating"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@id/service_availability"
+            android:src="@drawable/ic_tick_green_18dp" />
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/service_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_availability"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/service_image">
+
+            <TextView
+                android:id="@+id/service_time_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circular_grey_bordersolid"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="08:00 AM" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="-" />
+
+            <TextView
+                android:id="@+id/service_time_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circular_grey_bordersolid"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="08:00 AM" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/service_working_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_time"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/service_image">
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Days "/>-->
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_circle_fill" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

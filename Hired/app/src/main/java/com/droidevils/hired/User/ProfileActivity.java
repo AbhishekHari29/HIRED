@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droidevils.hired.Common.LoadingDialog;
 import com.droidevils.hired.Helper.Bean.ProfileBean;
 import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +29,14 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    public static final String PROFILE_TYPE = "PROFILE_TYPE";
     public static final String USER_PROFILE = "USER";
     public static final String OTHER_PROFILE = "OTHER";
+
+    public String profileType;
+
+    private LoadingDialog loadingDialog;
+    private int loadingProcess;
 
     CircularImageView profileImage;
     LinearLayout personalinfo, experience, review;
@@ -40,31 +49,49 @@ public class ProfileActivity extends AppCompatActivity {
     TextView personalSummary;
     TextView phone, email, cityState;
     TextView degreeField, institution, eduCityState;
+    TextView jobTitle, jobExperience, jobCompanyLocation;
 
     String currentUserId;
-    String userType;
 
     //Firebase
     FirebaseDatabase firebaseDatabase;
     DatabaseReference profileReference;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            currentUserId = extras.getString(UserBean.KEY_USER_ID);
-            userType = extras.getString(UserBean.KEY_USER_TYPE);
-        } else {
-            Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
             finish();
         }
 
+        currentUserId = currentUser.getUid();
+
+        //Profile Type
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            profileType = extras.getString(PROFILE_TYPE);
+        } else {
+            profileType = "";
+        }
+
+
+        loadingDialog = new LoadingDialog(ProfileActivity.this);
+        loadingProcess = 0;
+
+        loadingDialog.startLoadingDialog();
+
+        loadingProcess++;
         //Navigation
         personalinfo = findViewById(R.id.personalinfo);
         experience = findViewById(R.id.experience);
@@ -87,6 +114,9 @@ public class ProfileActivity extends AppCompatActivity {
         degreeField = findViewById(R.id.education_degree_field);
         institution = findViewById(R.id.education_institution);
         eduCityState = findViewById(R.id.education_city_state);
+        jobTitle = findViewById(R.id.job_title);
+        jobExperience = findViewById(R.id.job_experience);
+        jobCompanyLocation = findViewById(R.id.job_company_location);
 
         /*making personal info visible*/
         personalinfo.setVisibility(View.VISIBLE);
@@ -139,6 +169,10 @@ public class ProfileActivity extends AppCompatActivity {
             reviewbtn.setTextColor(getColor(R.color.blue));
 
         });
+
+        loadingProcess--;
+        if (loadingProcess < 1)
+            loadingDialog.stopLoadingDialog();
     }
 
     private void sendEmailIntent() {
@@ -158,6 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateProfileInformation() {
+        loadingProcess++;
 
         StorageReference profileImageReference = storageReference.child(currentUserId).child("profile_image.jpg");
         profileImageReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
@@ -176,9 +211,25 @@ public class ProfileActivity extends AppCompatActivity {
                     degreeField.setText(String.format("%s, %s", currentProfileBean.getDegree(), currentProfileBean.getField()));
                     institution.setText(currentProfileBean.getInstitution());
                     eduCityState.setText(String.format("%s, %s", currentProfileBean.getEduCity(), currentProfileBean.getEduState()));
+                    jobTitle.setText(currentProfileBean.getJobTitle());
+                    jobExperience.setText(String.format("%d Yrs Experience", currentProfileBean.getJobExperience()));
+                    jobCompanyLocation.setText(String.format("%s, %s", currentProfileBean.getCompany(), currentProfileBean.getLocation()));
+
+                    loadingProcess--;
+                    if (loadingProcess < 1)
+                        loadingDialog.stopLoadingDialog();
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+
+                    loadingProcess--;
+                    if (loadingProcess < 1)
+                        loadingDialog.stopLoadingDialog();
+
+                    Intent profileSetupIntent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+                    Bundle extras = new Bundle();
+                    extras.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_ADD);
+                    profileSetupIntent.putExtras(extras);
+                    startActivity(profileSetupIntent);
                     finish();
                 }
             }
@@ -190,10 +241,22 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public void onClickEditProfile(View view) {
+        Intent profileSetupIntent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_MODIFY);
+        profileSetupIntent.putExtras(extras);
+        startActivity(profileSetupIntent);
+        finish();
+    }
+
+    public void onClickBookmarkProfile(View view) {
 
     }
 
-    public void goBackButton(View view){
+    public void goBackButton(View view) {
         onBackPressed();
     }
 }

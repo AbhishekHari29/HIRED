@@ -15,7 +15,9 @@ import java.util.ArrayList;
 public class AvailableService {
 
     private String userId;
+    private String userName;
     private String serviceId;
+    private String serviceName;
     private boolean availability;
     private String timeFrom;
     private String timeTo;
@@ -25,9 +27,11 @@ public class AvailableService {
     public AvailableService() {
     }
 
-    public AvailableService(String userId, String serviceId, boolean availability, String timeFrom, String timeTo, String workingDays, float rating) {
+    public AvailableService(String userId, String userName, String serviceId, String serviceName, boolean availability, String timeFrom, String timeTo, String workingDays, float rating) {
         this.userId = userId;
+        this.userName = userName;
         this.serviceId = serviceId;
+        this.serviceName = serviceName;
         this.availability = availability;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
@@ -117,7 +121,7 @@ public class AvailableService {
     public static void getServiceByCategory(String categoryId, AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
-        reference.orderByKey().startAt(categoryId).endAt(categoryId+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.orderByKey().startAt(categoryId).endAt(categoryId + "\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<AvailableService> services = new ArrayList<>();
@@ -140,7 +144,6 @@ public class AvailableService {
     public static void getServiceById(String userId, String serviceId, AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
-//        reference.child(serviceId).child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
         reference.child(serviceId).child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -155,95 +158,76 @@ public class AvailableService {
         });
     }
 
-    public boolean addService() {
+    public void addService(AvailableServiceInterface serviceInterface) {
 
-        boolean result = updateService();
-        Service.getServiceById(serviceId, new ServiceInterface() {
+        updateService(new AvailableServiceInterface() {
             @Override
-            public void getServiceById(Service service) {
-                service.incrementServiceCount();
-                Log.i("MESSAGE", "Service count incremented");
+            public void getBooleanResult(Boolean result) {
+                if (result) {
+                    Log.i("MESSAGE", "Service Added: "+result);
+                    Service service = new Service();
+                    service.setServiceId(serviceId);
+                    service.incrementServiceCount(new ServiceInterface() {
+                        @Override
+                        public void getBooleanResult(Boolean result) {
+                            Log.i("MESSAGE", "Service Incremented: "+result);
+                            serviceInterface.getBooleanResult(result);
+                        }
+                    });
+                }
+                serviceInterface.getBooleanResult(false);
             }
         });
-        return result;
-
-
-//        final boolean[] result = {false};
-//        Log.i("MESSAGE", "Starting Add Service");
-//        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
-//        Log.i("MESSAGE", "Initiating Firebase");
-//        DatabaseReference reference = rootNode.getReference("AvailableService");
-//        Log.i("MESSAGE", "Getting Reference");
-//        reference.child(serviceId).child(userId).setValue(this).addOnCompleteListener(task -> {
-//            Log.i("MESSAGE", "Inside Event Listener");
-//            if (task.isSuccessful()){
-//                Log.i("MESSAGE", "Service Added");
-//            }else {
-//                Log.i("MESSAGE", "Service Not Added");
-//            }
-//            result[0] = task.isSuccessful();
-//            Service.getServiceById(serviceId, new ServiceInterface() {
-//                @Override
-//                public void getServiceById(Service service) {
-//                    service.incrementServiceCount();
-//                    Log.i("MESSAGE", "Service count incremented");
-//                }
-//            });
-//        });
-//        Log.i("MESSAGE", "Starting Add Service");
-//        return result[0];
     }
 
-    public boolean deleteService() {
-        final boolean[] result = new boolean[1];
+    public void deleteService(AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
         reference.child(serviceId).child(userId).removeValue().addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
-            Service.getServiceById(serviceId, new ServiceInterface() {
-                @Override
-                public void getServiceById(Service service) {
-                    service.decrementServiceCount();
-                }
-            });
+            if (task.isSuccessful()) {
+                Service service = new Service();
+                service.setServiceId(serviceId);
+                service.decrementServiceCount(new ServiceInterface() {
+                    @Override
+                    public void getBooleanResult(Boolean result) {
+                        serviceInterface.getBooleanResult(result);
+                    }
+                });
+            }
+            serviceInterface.getBooleanResult(false);
         });
-        return result[0];
     }
 
-    public boolean updateService() {
-        final boolean[] result = {false};
+    public void updateService(AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
         reference.child(serviceId).child(userId).setValue(this).addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
+            serviceInterface.getBooleanResult(task.isSuccessful());
         });
-        return result[0];
     }
 
-    public boolean enableAvailability() {
-        final boolean[] result = {false};
+    public void enableAvailability(AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
         reference.child(serviceId).child(userId).child("availability").setValue(true).addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
+            serviceInterface.getBooleanResult(task.isSuccessful());
         });
-        return result[0];
     }
 
-    public boolean disableAvailability() {
-        final boolean[] result = {false};
+    public void disableAvailability(AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
         reference.child(serviceId).child(userId).child("availability").setValue(false).addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
+            serviceInterface.getBooleanResult(task.isSuccessful());
         });
-        return result[0];
     }
 
     public void displayService() {
         Log.i("MESSAGE", "---------------------------------------------");
         Log.i("MESSAGE", "UserID:\t" + userId);
+        Log.i("MESSAGE", "UserName:\t" + userId);
         Log.i("MESSAGE", "ServiceID:\t" + serviceId);
+        Log.i("MESSAGE", "ServiceName:\t" + serviceId);
         Log.i("MESSAGE", "Availability:\t" + availability);
         Log.i("MESSAGE", "Time From:\t" + timeFrom);
         Log.i("MESSAGE", "Time To:\t" + timeTo);
@@ -260,12 +244,28 @@ public class AvailableService {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getServiceId() {
         return serviceId;
     }
 
     public void setServiceId(String serviceId) {
         this.serviceId = serviceId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public boolean isAvailability() {
@@ -307,7 +307,5 @@ public class AvailableService {
     public void setRating(float rating) {
         this.rating = rating;
     }
-
-
 }
 

@@ -1,5 +1,13 @@
 package com.droidevils.hired.Helper.Bean;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class UserBean {
 
     public  static final String KEY_USER_ID = "KEY_USER_ID";
@@ -23,6 +31,22 @@ public class UserBean {
         this.password = password;
         this.userType = userType;
         this.createdAt = createdAt;
+    }
+
+    public static void getUserById(String userId, UserInterface userInterface ){
+        DatabaseReference reference =  FirebaseDatabase.getInstance().getReference("User");
+        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserBean userBean = snapshot.getValue(UserBean.class);
+                userInterface.getUserById(userBean);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                userInterface.getUserById(null);
+            }
+        });
     }
 
     public String getFullName() {

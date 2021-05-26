@@ -74,12 +74,14 @@ public class CategoryListAdaptor extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         String child = (String) getChild(groupPosition, childPosition);
+        String[] array = child.split("::");
         if (convertView == null){
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.category_list_item, null);
         }
         TextView textView = convertView.findViewById(R.id.category_list_child);
-        textView.setText(child);
+        textView.setText(array[0]);
+        convertView.setContentDescription(array[1]);
         return convertView;
     }
 

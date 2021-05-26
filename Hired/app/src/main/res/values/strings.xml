@@ -65,6 +65,11 @@
     <string name="ratings">Star Ratings</string>
     <string name="samplereview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium bibendum sapien, ut euismod massa. Duis convallis sem sed turpis elementum auctor.</string>
     <string name="education">Education</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
+    <string name="service">Service</string>
 
     <!--    Categories-->
 
@@ -150,7 +155,6 @@
         <item>Physiotherapist</item>
         <item>Elderly Care</item>
     </string-array>
-    
-    
+
 
 </resources>

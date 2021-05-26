@@ -52,20 +52,40 @@
             android:layout_height="50dp">
 
             <ImageView
+                android:id="@+id/profile_edit_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
+                android:onClick="onClickEditProfile"
                 android:padding="6dp"
-                android:src="@drawable/ic_notifications_white_24dp" />
+                android:src="@drawable/ic_baseline_edit_24"
+                android:visibility="visible" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="8dp"
-                android:padding="4dp"
-                android:src="@drawable/circleyellowfil" />
+                android:id="@+id/profile_bookmark_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:onClick="onClickBookmarkProfile"
+                android:padding="6dp"
+                android:src="@drawable/ic_baseline_bookmark_border_24"
+                android:visibility="gone" />
+
+            <!--            <ImageView-->
+            <!--                android:layout_width="40dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                android:layout_centerInParent="true"-->
+            <!--                android:padding="6dp"-->
+            <!--                android:src="@drawable/ic_notifications_white_24dp" />-->
+
+            <!--            <ImageView-->
+            <!--                android:layout_width="20dp"-->
+            <!--                android:layout_height="20dp"-->
+            <!--                android:layout_alignParentTop="true"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_margin="8dp"-->
+            <!--                android:padding="4dp"-->
+            <!--                android:src="@drawable/circleyellowfil" />-->
         </RelativeLayout>
 
     </LinearLayout>
@@ -391,14 +411,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="10dp"
-                                android:fontFamily="@font/proximanovaregular"
-                                android:text="Edit"
-                                android:textColor="#FFCF66"
-                                android:textSize="14sp" />
+                            <!--                            <TextView-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:layout_marginEnd="10dp"-->
+                            <!--                                android:fontFamily="@font/proximanovaregular"-->
+                            <!--                                android:text="Edit"-->
+                            <!--                                android:textColor="#FFCF66"-->
+                            <!--                                android:textSize="14sp" />-->
                         </LinearLayout>
 
                         <TextView
@@ -437,13 +457,13 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:text="Edit"
-                            android:textColor="#FFCF66"
-                            android:textSize="14sp" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginEnd="10dp"-->
+                        <!--                            android:text="Edit"-->
+                        <!--                            android:textColor="#FFCF66"-->
+                        <!--                            android:textSize="14sp" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -555,12 +575,12 @@
                             android:layout_weight="1" />
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Edit"
-                            android:textColor="#FFCF66"
-                            android:textSize="14sp" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:text="Edit"-->
+                        <!--                            android:textColor="#FFCF66"-->
+                        <!--                            android:textSize="14sp" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -580,7 +600,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/circular_grey_bordersolid"
                                 android:padding="10dp"
-                                android:src="@drawable/education_cap" />
+                                android:src="@drawable/ic_baseline_school_24" />
 
                             <TextView
                                 android:id="@+id/education_degree_field"
@@ -656,7 +676,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/skills"
+                            android:text="@string/work_experience"
                             android:textSize="17sp"
                             android:textStyle="bold" />
 
@@ -666,12 +686,12 @@
                             android:layout_weight="1" />
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Edit"
-                            android:textColor="#FFCF66"
-                            android:textSize="14sp" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:text="Edit"-->
+                        <!--                            android:textColor="#FFCF66"-->
+                        <!--                            android:textSize="14sp" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -691,9 +711,10 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/circular_grey_bordersolid"
                                 android:padding="10dp"
-                                android:src="@drawable/paintbrush" />
+                                android:src="@drawable/ic_baseline_work_24" />
 
                             <TextView
+                                android:id="@+id/job_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -716,6 +737,7 @@
                                 android:src="@drawable/ic_email_24dp" />
 
                             <TextView
+                                android:id="@+id/job_experience"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -738,6 +760,7 @@
                                 android:src="@drawable/ic_location_24dp" />
 
                             <TextView
+                                android:id="@+id/job_company_location"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"

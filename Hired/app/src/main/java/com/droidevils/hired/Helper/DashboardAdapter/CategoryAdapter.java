@@ -32,9 +32,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         CategoryHelper serviceHelper = categories.get(position);
+
+        String[] array = serviceHelper.getTitle().split("::");
+
         holder.image.setImageResource(serviceHelper.getImage());
-        holder.title.setText(serviceHelper.getTitle());
+        holder.title.setText(array[0]);
         holder.layout.setBackground(serviceHelper.getBackground());
+        holder.layout.setContentDescription(array[1]);
     }
 
     @Override

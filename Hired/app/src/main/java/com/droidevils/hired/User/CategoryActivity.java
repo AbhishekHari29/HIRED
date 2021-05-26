@@ -2,15 +2,19 @@ package com.droidevils.hired.User;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.droidevils.hired.Helper.Bean.Category;
 import com.droidevils.hired.Helper.Bean.CategoryInterface;
 import com.droidevils.hired.Helper.Bean.Service;
 import com.droidevils.hired.Helper.Bean.ServiceInterface;
+import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.Helper.CategoryListAdaptor;
 import com.droidevils.hired.R;
 
@@ -82,7 +86,7 @@ public class CategoryActivity extends AppCompatActivity {
                         public void getServiceByCategory(ArrayList<Service> services) {
                             ArrayList<String> serviceNames = new ArrayList<>();
                             for (Service service : services)
-                                serviceNames.add(service.getServiceName());
+                                serviceNames.add(service.getServiceName()+"::"+service.getServiceId());
                             listItem.put(category.getCategoryName(), serviceNames);
 
                         }
@@ -91,6 +95,20 @@ public class CategoryActivity extends AppCompatActivity {
                 categoryListAdaptor.notifyDataSetChanged();
             }
         });
+    }
+
+    public void onClickServiceItem(View view){
+        Toast.makeText(CategoryActivity.this, "Clicked: " + view.getContentDescription(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.SERVICE_SEARCH);
+        bundle.putString(SearchActivity.SERVICE_SEARCH, view.getContentDescription().toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void goBackButton(View view){
+        onBackPressed();
     }
 
 }

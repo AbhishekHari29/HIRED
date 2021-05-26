@@ -5,14 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@color/lightWhite"
     android:orientation="vertical"
-    android:padding="0dp"
+
     tools:context=".User.CategoryActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="goBackButton"
+        android:padding="8dp"
+        android:src="@drawable/ic_arrow_back_black_24dp" />
 
     <TextView
         android:id="@+id/header"
-        android:padding="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/muli_black"
@@ -20,6 +32,8 @@
         android:textColor="#000"
         android:textSize="32sp"
         android:transitionName="header_text" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

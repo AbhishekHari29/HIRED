@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".User.ServiceUpdateActivity">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="goBackButton"
+        android:padding="8dp"
+        android:src="@drawable/ic_arrow_back_black_24dp" />
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/muli_black"
+        android:text="Service"
+        android:textColor="#000"
+        android:textSize="32sp"
+        android:transitionName="header_text" />
+
+    <LinearLayout
+        android:id="@+id/profile2_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_bold"
+            android:text="Select Service"
+            android:layout_marginBottom="10dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/service_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/service"
+            android:hint="@string/service">
+
+            <AutoCompleteTextView
+                android:id="@+id/service_atv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/time_from_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="Time From"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:layout_below="@+id/time_from_header"
+                    android:id="@+id/service_time_from"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_black"
+                    android:text="Time From" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/time_to_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="Time To"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:layout_below="@+id/time_to_header"
+                    android:id="@+id/service_time_to"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_black"
+                    android:text="Time From" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_bold"
+            android:text="Working Days"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <ca.antonious.materialdaypicker.MaterialDayPicker
+            android:id="@+id/service_working_day_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_bold"
+            android:text="Are you available?"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/service_availability_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Available"/>
+
+        <CheckBox
+            android:id="@+id/service_availability_checkbox"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="Available" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="#000"
+                android:fontFamily="@font/muli_black"
+                android:onClick="goBackButton"
+                android:text="@string/cancel"
+                android:textColor="#fff"
+                android:transitionName="button_trans" />
+
+            <Button
+                android:id="@+id/update_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="#000"
+                android:fontFamily="@font/muli_black"
+                android:onClick="onClickUpdate"
+                android:text="@string/update"
+                android:textColor="#fff"
+                android:transitionName="button_trans" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

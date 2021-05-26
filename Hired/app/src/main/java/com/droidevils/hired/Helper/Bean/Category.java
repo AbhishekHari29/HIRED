@@ -74,34 +74,30 @@ public class Category {
     }
 
 
-    public boolean addCategory() {
-        final boolean[] result = new boolean[1];
+    public void addCategory(CategoryInterface categoryInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Category");
         reference.child(categoryId).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                result[0] = task.isSuccessful();
+                categoryInterface.getBooleanResult(task.isSuccessful());
             }
         });
-        return result[0];
     }
 
-    public boolean updateCategory() {
-        return addCategory();
+    public void updateCategory(CategoryInterface categoryInterface) {
+         addCategory(categoryInterface);
     }
 
-    public boolean deleteCategory() {
-        final boolean[] result = new boolean[1];
+    public void deleteCategory(CategoryInterface categoryInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Category");
         reference.child(categoryId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                result[0] = task.isSuccessful();
+                categoryInterface.getBooleanResult( task.isSuccessful());
             }
         });
-        return result[0];
     }
 
     public void displayCategory() {

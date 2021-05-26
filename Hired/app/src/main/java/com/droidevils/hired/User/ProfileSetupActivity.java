@@ -38,6 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +46,12 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class ProfileSetupActivity extends AppCompatActivity {
+
+    public static final String PROFILE_OPERATION = "PROFILE_OPERATION";
+    public static final String PROFILE_ADD = "PROFILE_ADD";
+    public static final String PROFILE_MODIFY = "PROFILE_MODIFY";
+
+    private String profileOperation;
 
     private final int PICK_IMAGE = 1;
 
@@ -83,6 +90,16 @@ public class ProfileSetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_setup);
 
         loadingDialog = new LoadingDialog(ProfileSetupActivity.this);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
         //Form Input Elements
         //Account
@@ -137,14 +154,24 @@ public class ProfileSetupActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degree)));
 
         //Firebase
-        mAuth = FirebaseAuth.getInstance();
         rootNode = FirebaseDatabase.getInstance();
         profileReference = rootNode.getReference("Profile");
         userReference = rootNode.getReference("User");
-        currentUser = mAuth.getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            profileOperation = extras.getString(PROFILE_OPERATION);
+            if (profileOperation.equals(PROFILE_MODIFY)) {
+                retrieveProfileInformation();
+            }
+        } else {
+            profileOperation = "";
+        }
+
+        //Existing User Information
         userReference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -161,6 +188,64 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void retrieveProfileInformation() {
+
+        // TODO Profile Image not displaying
+        //Retrive Profile Image
+        StorageReference profileImageReference = storageReference.child(currentUser.getUid()).child("profile_image.jpg");
+        profileImageReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
+
+        //Existing Profile Information
+        profileReference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ProfileBean profileBean = snapshot.getValue(ProfileBean.class);
+                if (profileBean != null) {
+                    //Account
+                    fullName.getEditText().setText(profileBean.getFullName());
+                    email.getEditText().setText(profileBean.getEmail());
+                    phone.getEditText().setText(profileBean.getPhone());
+                    summary.getEditText().setText(profileBean.getSummary());
+
+                    //Personal
+                    genderAtv.setText(profileBean.getGender(), false);
+                    birthDate.getEditText().setText(profileBean.getBirthDate());
+                    address.getEditText().setText(profileBean.getAddress());
+                    city.getEditText().setText(profileBean.getCity());
+                    state.getEditText().setText(profileBean.getState());
+                    pincode.getEditText().setText(profileBean.getPincode());
+
+                    //Education
+                    field.getEditText().setText(profileBean.getField());
+                    degreeAtv.setText(profileBean.getDegree(), false);
+                    institution.getEditText().setText(profileBean.getInstitution());
+                    eduCity.getEditText().setText(profileBean.getEduCity());
+                    eduState.getEditText().setText(profileBean.getEduState());
+                    stillStudying.setChecked(profileBean.isStillStudying());
+                    graduationDate.getEditText().setText(profileBean.getGraduationDate());
+
+                    //Work Experience
+                    jobTitle.getEditText().setText(profileBean.getJobTitle());
+                    jobCompany.getEditText().setText(profileBean.getCompany());
+                    jobLocation.getEditText().setText(profileBean.getLocation());
+                    jobExperience.getEditText().setText(String.valueOf(profileBean.getJobExperience()));
+                    jobDesc.getEditText().setText(profileBean.getJobDescription());
+                    stillWorking.setChecked(profileBean.isStillWorking());
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Something went wrong. Try again", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Something went wrong. Try again", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     public void uploadProfileImageToFirebase() {
@@ -200,7 +285,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 profileImageUri = result.getUri();
                 profileImage.setImageURI(profileImageUri);
-//                uploadProfileImageToFirebase();
+                uploadProfileImageToFirebase();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -399,7 +484,8 @@ public class ProfileSetupActivity extends AppCompatActivity {
             }
         });
     }
-    public void goBackButton(View view){
+
+    public void goBackButton(View view) {
         onBackPressed();
     }
 }

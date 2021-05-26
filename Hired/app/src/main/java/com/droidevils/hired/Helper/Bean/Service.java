@@ -34,14 +34,11 @@ public class Service {
     public static void getAllService(ServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
-        Log.i("MESSAGE", "Before Reading from firebase");
         reference.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.i("MESSAGE", "Found Data");
                 ArrayList<Service> services = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Log.i("MESSAGE", "Iterating Data");
                     Service service = dataSnapshot.getValue(Service.class);
                     services.add(service);
                 }
@@ -53,20 +50,16 @@ public class Service {
                 serviceInterface.getAllService(null);
             }
         });
-        Log.i("MESSAGE", "After Reading from firebase");
     }
 
     public static void getServiceByCategory(String categoryId, ServiceInterface serviceInterface) {
-        Log.i("MESSAGE", "Before Reading from firebase");
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
         reference.orderByChild("categoryId").equalTo(categoryId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.i("MESSAGE", "Found Data");
                 ArrayList<Service> services = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Log.i("MESSAGE", "Iterating Data");
                     Service service = dataSnapshot.getValue(Service.class);
                     services.add(service);
                 }
@@ -78,7 +71,6 @@ public class Service {
                 serviceInterface.getAllService(null);
             }
         });
-        Log.i("MESSAGE", "After Reading from firebase");
     }
 
     public static void getServiceByName(String serviceName, ServiceInterface serviceInterface) {
@@ -119,81 +111,73 @@ public class Service {
         });
     }
 
-    public boolean addService() {
-        final boolean[] result = {false};
+    public void addService(ServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
         reference.child(serviceId).setValue(this).addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
+            serviceInterface.getBooleanResult(task.isSuccessful());
         });
-        return result[0];
     }
 
-    public boolean deleteService() {
-        final boolean[] result = new boolean[1];
+    public void deleteService(ServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
         reference.child(serviceId).removeValue().addOnCompleteListener(task -> {
-            result[0] = task.isSuccessful();
+            serviceInterface.getBooleanResult(task.isSuccessful());
         });
-        return result[0];
     }
 
-    public boolean updateService() {
-        return addService();
+    public void updateService(ServiceInterface serviceInterface) {
+        addService(serviceInterface);
     }
 
-    public boolean incrementServiceCount() {
+    public void incrementServiceCount(ServiceInterface serviceInterface) {
 
         // TODO Ensure Concurrent Operation
-        final boolean[] result = new boolean[1];
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
         reference.child(serviceId).child("count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 count = (int) snapshot.getValue(Integer.class);
-                snapshot.getRef().setValue(++count).addOnCompleteListener(task -> result[0] = task.isSuccessful());
+                snapshot.getRef().setValue(++count).addOnCompleteListener(task -> serviceInterface.getBooleanResult(task.isSuccessful()));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                result[0] = false;
+                serviceInterface.getBooleanResult(false);
             }
         });
-        return result[0];
     }
 
-    public boolean decrementServiceCount() {
+    public void decrementServiceCount(ServiceInterface serviceInterface) {
 
         // TODO Ensure Concurrent Operation
-        final boolean[] result = new boolean[1];
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("Service");
         reference.child(serviceId).child("count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 count = (int) snapshot.getValue(Integer.class);
-                snapshot.getRef().setValue(--count).addOnCompleteListener(task -> result[0] = task.isSuccessful());
+                snapshot.getRef().setValue(--count).addOnCompleteListener(task -> serviceInterface.getBooleanResult(task.isSuccessful()));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                result[0] = false;
+                serviceInterface.getBooleanResult(false);
             }
         });
-        return result[0];
     }
 
 
     public void displayService() {
-        Log.i("MESSAGE","---------------------------------------------");
-        Log.i("MESSAGE","ServiceID:\t" + serviceId);
-        Log.i("MESSAGE","ServiceName:\t" + serviceName);
-        Log.i("MESSAGE","Description:\t" + description);
-        Log.i("MESSAGE","CategoryID:\t" + categoryId);
-        Log.i("MESSAGE","Count:\t" + count);
-        Log.i("MESSAGE","---------------------------------------------");
+        Log.i("MESSAGE", "---------------------------------------------");
+        Log.i("MESSAGE", "ServiceID:\t" + serviceId);
+        Log.i("MESSAGE", "ServiceName:\t" + serviceName);
+        Log.i("MESSAGE", "Description:\t" + description);
+        Log.i("MESSAGE", "CategoryID:\t" + categoryId);
+        Log.i("MESSAGE", "Count:\t" + count);
+        Log.i("MESSAGE", "---------------------------------------------");
     }
 
     public String getServiceId() {

@@ -5,22 +5,22 @@
         <item
             android:id="@+id/nav_home"
             android:title="Home"
-            android:icon="@drawable/home"/>
+            android:icon="@drawable/ic_baseline_home_24"/>
 
         <item
             android:id="@+id/nav_search"
             android:title="Search"
-            android:icon="@drawable/search"/>
+            android:icon="@drawable/ic_baseline_search_24"/>
 
         <item
             android:id="@+id/nav_category"
             android:title="Category"
-            android:icon="@drawable/user_shape"/>
+            android:icon="@drawable/ic_baseline_category_24"/>
 
         <item
             android:id="@+id/nav_chat"
             android:title="Chat"
-            android:icon="@drawable/chat"/>
+            android:icon="@drawable/ic_baseline_chat_24"/>
 
     </group>
 
@@ -30,7 +30,7 @@
                 <item
                     android:id="@+id/nav_profile"
                     android:title="Profile"
-                    android:icon="@drawable/user_shape"/>
+                    android:icon="@drawable/ic_baseline_user1_24"/>
                 <item
                     android:id="@+id/nav_login"
                     android:title="Login"
@@ -42,7 +42,7 @@
                 <item
                     android:id="@+id/nav_logout"
                     android:title="Logout"
-                    android:icon="@drawable/user_shape"/>
+                    android:icon="@drawable/ic_baseline_logout_24"/>
             </group>
         </menu>
     </item>
@@ -72,11 +72,11 @@
                 <item
                     android:id="@+id/nav_share"
                     android:title="Share"
-                    android:icon="@drawable/user_shape"/>
+                    android:icon="@drawable/ic_baseline_share_24"/>
                 <item
                     android:id="@+id/nav_rateus"
                     android:title="Rate us"
-                    android:icon="@drawable/user_shape"/>
+                    android:icon="@drawable/ic_baseline_star_rate_24"/>
             </group>
         </menu>
     </item>
