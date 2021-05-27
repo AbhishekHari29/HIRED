@@ -361,7 +361,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Profile Added", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                     loadingDialog.stopLoadingDialog();
                     startActivity(intent);

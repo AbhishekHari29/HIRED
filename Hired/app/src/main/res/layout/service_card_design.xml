@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="onClickService"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp">
+    app:cardBackgroundColor="@color/grey">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/circularbordersolid"
+        android:elevation="8dp"
         android:padding="10dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/service_image"
             android:layout_width="100dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/service1" />
+            android:src="@drawable/service1"
+            app:shapeAppearanceOverlay="@style/corner_rounded_image" />
 
         <TextView
             android:id="@+id/service_title"
@@ -31,42 +33,55 @@
             android:textColor="@color/colorAccent"
             android:textSize="20dp" />
 
+        <TextView
+            android:id="@+id/service_sub_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/service_title"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/service_image"
+            android:fontFamily="@font/muli_bold"
+            android:text="User Name"
+            android:textColor="@color/colorAccent" />
+
         <RatingBar
             android:id="@+id/service_rating"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/service_title"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/service_image"
-            android:rating="4" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:progressTint="@color/rating_bar"
+            android:rating="4"
+            android:secondaryProgressTint="@color/rating_bar" />
 
         <TextView
             android:id="@+id/service_availability"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/service_rating"
+            android:layout_below="@id/service_sub_title"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/service_image"
+            android:fontFamily="@font/muli"
             android:text="Availabilty" />
 
         <ImageView
             android:id="@+id/service_availability_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/service_rating"
+            android:layout_below="@id/service_sub_title"
             android:layout_marginTop="12dp"
             android:layout_toRightOf="@id/service_availability"
             android:src="@drawable/ic_tick_green_18dp" />
 
         <LinearLayout
-            android:layout_marginTop="5dp"
             android:id="@+id/service_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/service_availability"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/service_image">
 
             <TextView
@@ -110,6 +125,11 @@
             <!--                android:layout_width="wrap_content"-->
             <!--                android:layout_height="wrap_content"-->
             <!--                android:text="Days "/>-->
+
+            <!--            <ca.antonious.materialdaypicker.MaterialDayPicker-->
+            <!--                android:id="@+id/working_day_display"-->
+            <!--                android:layout_width="150dp"-->
+            <!--                android:layout_height="24dp"/>-->
 
             <ImageView
                 android:layout_width="wrap_content"

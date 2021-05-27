@@ -1,20 +1,35 @@
 package com.droidevils.hired.User;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.droidevils.hired.Common.LoadingDialog;
+import com.droidevils.hired.Helper.AvailableServiceHelper;
+import com.droidevils.hired.Helper.Bean.AvailableService;
+import com.droidevils.hired.Helper.Bean.AvailableServiceInterface;
 import com.droidevils.hired.Helper.Bean.ProfileBean;
-import com.droidevils.hired.Helper.Bean.UserBean;
+import com.droidevils.hired.Helper.ProcessManager;
+import com.droidevils.hired.Helper.ServiceAdapter;
 import com.droidevils.hired.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,20 +42,26 @@ import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class ProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_TYPE = "PROFILE_TYPE";
+    public static final String PROFILE_ID = "PROFILE_ID";
     public static final String USER_PROFILE = "USER";
     public static final String OTHER_PROFILE = "OTHER";
 
-    public String profileType;
+    private ProcessManager processManager;
 
-    private LoadingDialog loadingDialog;
-    private int loadingProcess;
+    private String profileType;
+    private String profileId;
 
+
+    ImageView bookmarkBtn, editButton;
+    Button addServiceButton;
     CircularImageView profileImage;
-    LinearLayout personalinfo, experience, review;
-    TextView personalinfobtn, experiencebtn, reviewbtn;
+    LinearLayout personalInfoLayout, serviceLayout, reviewLayout;
+    TextView personalInfoBtn, serviceBtn, reviewBtn;
 
     //Profile Information
     ProfileBean currentProfileBean;
@@ -51,7 +72,12 @@ public class ProfileActivity extends AppCompatActivity {
     TextView degreeField, institution, eduCityState;
     TextView jobTitle, jobExperience, jobCompanyLocation;
 
-    String currentUserId;
+    ArrayList<AvailableService> availableServices;
+
+    ArrayList<AvailableServiceHelper> serviceHelpers;
+    ListView serviceListView;
+    ServiceAdapter serviceAdapter;
+
 
     //Firebase
     FirebaseDatabase firebaseDatabase;
@@ -75,30 +101,21 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
         }
 
-        currentUserId = currentUser.getUid();
+        processManager = new ProcessManager(ProfileActivity.this);
 
-        //Profile Type
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            profileType = extras.getString(PROFILE_TYPE);
-        } else {
-            profileType = "";
-        }
+        processManager.incrementProcessCount();//1
 
-
-        loadingDialog = new LoadingDialog(ProfileActivity.this);
-        loadingProcess = 0;
-
-        loadingDialog.startLoadingDialog();
-
-        loadingProcess++;
         //Navigation
-        personalinfo = findViewById(R.id.personalinfo);
-        experience = findViewById(R.id.experience);
-        review = findViewById(R.id.review);
-        personalinfobtn = findViewById(R.id.personalinfobtn);
-        experiencebtn = findViewById(R.id.experiencebtn);
-        reviewbtn = findViewById(R.id.reviewbtn);
+        personalInfoLayout = findViewById(R.id.personalinfo);
+        serviceLayout = findViewById(R.id.service);
+        reviewLayout = findViewById(R.id.review);
+        personalInfoBtn = findViewById(R.id.personalinfobtn);
+        serviceBtn = findViewById(R.id.service_btn);
+        reviewBtn = findViewById(R.id.reviewbtn);
+
+        editButton = findViewById(R.id.profile_edit_button);
+        bookmarkBtn = findViewById(R.id.profile_bookmark_button);
+        addServiceButton = findViewById(R.id.add_service_btn);
 
         //Profile Information
         profileImage = findViewById(R.id.profile_image);
@@ -118,10 +135,19 @@ public class ProfileActivity extends AppCompatActivity {
         jobExperience = findViewById(R.id.job_experience);
         jobCompanyLocation = findViewById(R.id.job_company_location);
 
+        serviceListView = findViewById(R.id.service_list);
+        availableServices = new ArrayList<>();
+        serviceHelpers = new ArrayList<>();
+        serviceAdapter = new ServiceAdapter(ProfileActivity.this, serviceHelpers);
+        serviceListView.setAdapter(serviceAdapter);
+        registerForContextMenu(serviceListView);
+
+        retrieveAvailableServiceInformation();
+
         /*making personal info visible*/
-        personalinfo.setVisibility(View.VISIBLE);
-        experience.setVisibility(View.GONE);
-        review.setVisibility(View.GONE);
+        personalInfoLayout.setVisibility(View.VISIBLE);
+        serviceLayout.setVisibility(View.GONE);
+        reviewLayout.setVisibility(View.GONE);
 
         //Firebase
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -129,50 +155,102 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference("Profile");
 
-        if (currentUserId != null) {
-            updateProfileInformation();
+        //Profile Type
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            profileType = extras.getString(PROFILE_TYPE);
+            profileId = extras.getString(PROFILE_ID);
+            if (profileId != null && !profileId.isEmpty()) {
+                updateProfileInformation();
+            }
+            if (profileType != null && !profileType.isEmpty()) {
+                if (profileType.equals(USER_PROFILE)) {
+                    addServiceButton.setEnabled(true);
+                    addServiceButton.setVisibility(View.VISIBLE);
+                    editButton.setEnabled(true);
+                    editButton.setVisibility(View.VISIBLE);
+                    bookmarkBtn.setEnabled(false);
+                    bookmarkBtn.setVisibility(View.INVISIBLE);
+                } else if (profileType.equals(OTHER_PROFILE)) {
+                    addServiceButton.setEnabled(false);
+                    addServiceButton.setVisibility(View.INVISIBLE);
+                    editButton.setEnabled(false);
+                    editButton.setVisibility(View.INVISIBLE);
+                    bookmarkBtn.setEnabled(true);
+                    bookmarkBtn.setVisibility(View.VISIBLE);
+                } else {
+
+                }
+            }
+        } else {
+            profileType = "";
+            profileId = "";
         }
 
         contactPhone.setOnClickListener(v -> openCallerIntent());
 
         contactEmail.setOnClickListener(v -> sendEmailIntent());
 
-        personalinfobtn.setOnClickListener(v -> {
+        personalInfoBtn.setOnClickListener(v -> {
 
-            personalinfo.setVisibility(View.VISIBLE);
-            experience.setVisibility(View.GONE);
-            review.setVisibility(View.GONE);
-            personalinfobtn.setTextColor(getColor(R.color.blue));
-            experiencebtn.setTextColor(getColor(R.color.grey));
-            reviewbtn.setTextColor(getColor(R.color.grey));
-
-        });
-
-        experiencebtn.setOnClickListener(v -> {
-
-            personalinfo.setVisibility(View.GONE);
-            experience.setVisibility(View.VISIBLE);
-            review.setVisibility(View.GONE);
-            personalinfobtn.setTextColor(getColor(R.color.grey));
-            experiencebtn.setTextColor(getColor(R.color.blue));
-            reviewbtn.setTextColor(getColor(R.color.grey));
+            personalInfoLayout.setVisibility(View.VISIBLE);
+            serviceLayout.setVisibility(View.GONE);
+            reviewLayout.setVisibility(View.GONE);
+            personalInfoBtn.setTextColor(getColor(R.color.blue));
+            serviceBtn.setTextColor(getColor(R.color.grey));
+            reviewBtn.setTextColor(getColor(R.color.grey));
 
         });
 
-        reviewbtn.setOnClickListener(v -> {
+        serviceBtn.setOnClickListener(v -> {
 
-            personalinfo.setVisibility(View.GONE);
-            experience.setVisibility(View.GONE);
-            review.setVisibility(View.VISIBLE);
-            personalinfobtn.setTextColor(getColor(R.color.grey));
-            experiencebtn.setTextColor(getColor(R.color.grey));
-            reviewbtn.setTextColor(getColor(R.color.blue));
+            personalInfoLayout.setVisibility(View.GONE);
+            serviceLayout.setVisibility(View.VISIBLE);
+            reviewLayout.setVisibility(View.GONE);
+            personalInfoBtn.setTextColor(getColor(R.color.grey));
+            serviceBtn.setTextColor(getColor(R.color.blue));
+            reviewBtn.setTextColor(getColor(R.color.grey));
 
         });
 
-        loadingProcess--;
-        if (loadingProcess < 1)
-            loadingDialog.stopLoadingDialog();
+        reviewBtn.setOnClickListener(v -> {
+
+            personalInfoLayout.setVisibility(View.GONE);
+            serviceLayout.setVisibility(View.GONE);
+            reviewLayout.setVisibility(View.VISIBLE);
+            personalInfoBtn.setTextColor(getColor(R.color.grey));
+            serviceBtn.setTextColor(getColor(R.color.grey));
+            reviewBtn.setTextColor(getColor(R.color.blue));
+
+        });
+
+        processManager.decrementProcessCount();//1
+    }
+
+    private void retrieveAvailableServiceInformation() {
+        processManager.incrementProcessCount();
+
+        //TODO Query only User Service
+        AvailableService.getAllService(new AvailableServiceInterface() {
+            @Override
+            public void getAllService(ArrayList<AvailableService> services) {
+                if (services != null && services.size() > 0) {
+                    availableServices.addAll(services);
+                    for (AvailableService availableService : availableServices)
+                        serviceHelpers.add(new AvailableServiceHelper(R.drawable.service1,
+                                availableService.getUserId(), availableService.getUserName(),
+                                availableService.getServiceId(), availableService.getServiceName(),
+                                availableService.getRating(), availableService.isAvailability(),
+                                availableService.getTimeFrom(), availableService.getTimeTo(),
+                                availableService.getWorkingDays()));
+                    serviceAdapter.setOriginalList(serviceHelpers);
+                    serviceAdapter.notifyDataSetChanged();
+                    //Filter
+                    serviceAdapter.getFilter().filter(profileId);
+                }
+                processManager.decrementProcessCount();
+            }
+        });
     }
 
     private void sendEmailIntent() {
@@ -192,12 +270,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateProfileInformation() {
-        loadingProcess++;
+        processManager.incrementProcessCount();//2
+//        processManager.incrementProcessCount();//3
+        StorageReference profileImageReference = storageReference.child(profileId).child("profile_image.jpg");
+        profileImageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+            Picasso.get().load(uri).into(profileImage);
+//            processManager.decrementProcessCount();//3
+        });
 
-        StorageReference profileImageReference = storageReference.child(currentUserId).child("profile_image.jpg");
-        profileImageReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
-
-        profileReference.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        profileReference.child(profileId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currentProfileBean = snapshot.getValue(ProfileBean.class);
@@ -215,21 +296,21 @@ public class ProfileActivity extends AppCompatActivity {
                     jobExperience.setText(String.format("%d Yrs Experience", currentProfileBean.getJobExperience()));
                     jobCompanyLocation.setText(String.format("%s, %s", currentProfileBean.getCompany(), currentProfileBean.getLocation()));
 
-                    loadingProcess--;
-                    if (loadingProcess < 1)
-                        loadingDialog.stopLoadingDialog();
+                    processManager.decrementProcessCount();//2
 
                 } else {
 
-                    loadingProcess--;
-                    if (loadingProcess < 1)
-                        loadingDialog.stopLoadingDialog();
+                    processManager.decrementProcessCount();//2
 
-                    Intent profileSetupIntent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
-                    Bundle extras = new Bundle();
-                    extras.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_ADD);
-                    profileSetupIntent.putExtras(extras);
-                    startActivity(profileSetupIntent);
+                    if (profileType.equals(USER_PROFILE)) {
+                        Intent profileSetupIntent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_ADD);
+                        profileSetupIntent.putExtras(extras);
+                        startActivity(profileSetupIntent);
+                        finish();
+                    }
+                    Toast.makeText(getApplicationContext(), "Profile Not found", Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -256,7 +337,112 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public void onClickAddServiceBtn(View view) {
+        Intent serviceAddIntent = new Intent(getApplicationContext(), ServiceUpdateActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_ADD);
+        serviceAddIntent.putExtras(bundle);
+        startActivity(serviceAddIntent);
+    }
+
     public void goBackButton(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        if (profileType.equals(USER_PROFILE)) {
+            inflater.inflate(R.menu.context_profile_service_menu, menu);
+        } else {
+            inflater.inflate(R.menu.context_search_service_menu, menu);
+            menu.getItem(0).setEnabled(false);
+            menu.getItem(0).setVisible(false);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        AvailableServiceHelper serviceHelper = (AvailableServiceHelper) serviceHelpers.get((int) menuInfo.id);
+        switch (item.getItemId()) {
+            case R.id.context_book_appointment:
+
+                //Book Appointment
+
+                return true;
+
+            case R.id.context_delete_service:
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Service")
+                        .setMessage("Are you sure you want to delete this Service ?")
+                        .setIcon(R.drawable.ic_baseline_delete_24)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AvailableService service = new AvailableService();
+                                service.setServiceId(serviceHelper.getServiceId());
+                                service.setUserId(serviceHelper.getUserId());
+                                service.deleteService(new AvailableServiceInterface() {
+                                    @Override
+                                    public void getBooleanResult(Boolean result) {
+                                        Toast.makeText(getApplicationContext(), result?"Service Deleted":"Service couldn't be Deleted", Toast.LENGTH_SHORT).show();
+                                        if (result) {
+                                            serviceHelpers.remove((int) menuInfo.id);
+                                            serviceAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+
+                return true;
+            case R.id.context_edit_service:
+                Intent serviceUpdateIntent = new Intent(getApplicationContext(), ServiceUpdateActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_MODIFY);
+                extras.putString(ServiceUpdateActivity.SERVICE_ID, serviceHelper.getServiceId());
+                serviceUpdateIntent.putExtras(extras);
+                startActivity(serviceUpdateIntent);
+                return true;
+            case R.id.context_set_availability:
+                AvailableService availableService = new AvailableService();
+                availableService.setUserId(serviceHelper.getUserId());
+                availableService.setServiceId(serviceHelper.getServiceId());
+                if (serviceHelper.isAvailability())
+                    availableService.disableAvailability(new AvailableServiceInterface() {
+                        @Override
+                        public void getBooleanResult(Boolean result) {
+                            if (result) {
+                                serviceHelper.setAvailability(false);
+                                serviceHelpers.set((int) menuInfo.id, serviceHelper);
+                                serviceAdapter.notifyDataSetChanged();
+                                Toast.makeText(getApplicationContext(), "Service Disabled", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Service couldn't be Disabled", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                else
+                    availableService.enableAvailability(new AvailableServiceInterface() {
+                        @Override
+                        public void getBooleanResult(Boolean result) {
+                            if (result) {
+                                serviceHelper.setAvailability(true);
+                                serviceHelpers.set((int) menuInfo.id, serviceHelper);
+                                serviceAdapter.notifyDataSetChanged();
+                                Toast.makeText(getApplicationContext(), "Service Enabled", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Service couldn't be Enabled", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 }

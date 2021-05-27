@@ -102,7 +102,7 @@ public class CategoryActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.SERVICE_SEARCH);
-        bundle.putString(SearchActivity.SERVICE_SEARCH, view.getContentDescription().toString());
+        bundle.putString(SearchActivity.SEARCH_ID, view.getContentDescription().toString());
         intent.putExtras(bundle);
         startActivity(intent);
     }

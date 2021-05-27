@@ -21,7 +21,7 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/home_background"
+        android:background="@color/grey"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -276,7 +276,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/featured_services"
-                        android:background="@color/home_background" />
+                        android:background="@color/grey" />
 
 
                 </RelativeLayout>

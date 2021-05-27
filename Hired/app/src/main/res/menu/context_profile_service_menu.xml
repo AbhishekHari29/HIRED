@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/context_set_availability"
+        android:title="Change Availability"
+        android:icon="@drawable/ic_baseline_post_add_24"/>
+    <item
+        android:id="@+id/context_edit_service"
+        android:title="Edit Service"
+        android:icon="@drawable/ic_baseline_user1_24"/>
+    <item
+        android:id="@+id/context_delete_service"
+        android:title="Delete Service"
+        android:icon="@drawable/ic_baseline_post_add_24"/>
+</menu>

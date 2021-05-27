@@ -18,7 +18,7 @@ public class Service {
     private String serviceName;
     private String description;
     private String categoryId;
-    private int count;
+    public int count;
 
     public Service() {
     }

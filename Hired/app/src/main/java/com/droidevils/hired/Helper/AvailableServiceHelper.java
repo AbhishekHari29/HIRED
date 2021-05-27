@@ -3,6 +3,8 @@ package com.droidevils.hired.Helper;
 public class AvailableServiceHelper {
 
     private int serviceImage;
+    private String userId;
+    private String userName;
     private String serviceId;
     private String serviceName;
     private float serviceRating;
@@ -11,8 +13,10 @@ public class AvailableServiceHelper {
     private String timeTo;
     private String workingDays;
 
-    public AvailableServiceHelper(int serviceImage, String serviceId, String serviceName, float serviceRating, boolean availability, String timeFrom, String timeTo, String workingDays) {
+    public AvailableServiceHelper(int serviceImage, String userId, String userName, String serviceId, String serviceName, float serviceRating, boolean availability, String timeFrom, String timeTo, String workingDays) {
         this.serviceImage = serviceImage;
+        this.userId = userId;
+        this.userName = userName;
         this.serviceId = serviceId;
         this.serviceName = serviceName;
         this.serviceRating = serviceRating;
@@ -34,6 +38,14 @@ public class AvailableServiceHelper {
         return serviceName;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
     public float getServiceRating() {
         return serviceRating;
     }
@@ -52,5 +64,9 @@ public class AvailableServiceHelper {
 
     public String getWorkingDays() {
         return workingDays;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
     }
 }

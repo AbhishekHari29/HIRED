@@ -95,99 +95,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerVisible(GravityCompat.START))
-            drawerLayout.closeDrawer(GravityCompat.START);
-        else
-            super.onBackPressed();
-    }
-
-    //Navigation Functions
-    private void navigationDrawer() {
-
-        navigationView.bringToFront();
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerVisible(GravityCompat.START))
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                else
-                    drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        animateNavigationDrawer();
-
-    }
-
-    private void animateNavigationDrawer() {
-        //Add any color or remove it to use the default one!
-        //To make it transparent use Color.Transparent in side setScrimColor();
-        //drawerLayout.setScrimColor(Color.TRANSPARENT);
-        drawerLayout.setScrimColor(getColor(R.color.blue_200));
-        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                // Scale the View based on current slide offset
-                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
-                final float offsetScale = 1 - diffScaledOffset;
-                contentView.setScaleX(offsetScale);
-                contentView.setScaleY(offsetScale);
-
-                // Translate the View, accounting for the scaled width
-                final float xOffset = drawerView.getWidth() * slideOffset;
-                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
-                final float xTranslation = xOffset - xOffsetDiff;
-                contentView.setTranslationX(xTranslation);
-            }
-        });
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_profile:
-                gotoProfileActivity(new View(this));
-                break;
-            case R.id.nav_logout:
-                mAuth.signOut();
-                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(loginIntent);
-                finish();
-                break;
-            case R.id.nav_category:
-                gotoCategoryActivity(new View(this));
-                break;
-            case R.id.nav_search:
-                gotoSearchActivity(new View(this));
-                break;
-            case R.id.nav_category1:
-                Intent serviceAddIntent = new Intent(getApplicationContext(), ServiceUpdateActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_MODIFY);
-                bundle.putString(ServiceUpdateActivity.SERVICE_ID, "102008");
-                serviceAddIntent.putExtras(bundle);
-                startActivity(serviceAddIntent);
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    public void gotoSearchActivity(View view) {
-        Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
-        startActivity(searchIntent);
-    }
-
-    public void gotoCategoryActivity(View view) {
-        Intent categoryIntent = new Intent(getApplicationContext(), CategoryActivity.class);
-        startActivity(categoryIntent);
-    }
-
     //Recycler View
     private void featuredServiceRecycler() {
         featuredServiceRecycler.setHasFixedSize(true);
@@ -240,46 +147,107 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 }
             }
         });
-
-
-//        ArrayList<CategoryHelper> categoryHelpers = new ArrayList<>();
-//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Marketing", gradient1));
-//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Social", gradient2));
-//        categoryHelpers.add(new CategoryHelper(R.drawable.chat, "Education", gradient3));
-//
-//        categoryAdapter = new CategoryAdapter(categoryHelpers);
-//        categoryRecycler.setAdapter(categoryAdapter);
     }
 
-    public void gotoProfileSetupActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), ProfileSetupActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_MODIFY);
-        intent.putExtras(bundle);
-        startActivity(intent);
+    //Navigation Functions
+    private void navigationDrawer() {
+
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.isDrawerVisible(GravityCompat.START))
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        animateNavigationDrawer();
+
+    }
+
+    private void animateNavigationDrawer() {
+        //Add any color or remove it to use the default one!
+        //To make it transparent use Color.Transparent in side setScrimColor();
+        //drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawerLayout.setScrimColor(getColor(R.color.blue_200));
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                contentView.setScaleX(offsetScale);
+                contentView.setScaleY(offsetScale);
+
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                contentView.setTranslationX(xTranslation);
+            }
+        });
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_profile:
+                gotoProfileActivity(new View(this));
+                break;
+            case R.id.nav_logout:
+                mAuth.signOut();
+                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginIntent);
+                finish();
+                break;
+            case R.id.nav_category:
+                gotoCategoryActivity(new View(this));
+                break;
+            case R.id.nav_search:
+                gotoSearchActivity(new View(this));
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void gotoSearchActivity(View view) {
+        Intent searchIntent = new Intent(getApplicationContext(), SearchActivity.class);
+        startActivity(searchIntent);
+    }
+
+    public void gotoCategoryActivity(View view) {
+        Intent categoryIntent = new Intent(getApplicationContext(), CategoryActivity.class);
+        startActivity(categoryIntent);
     }
 
     public void gotoProfileActivity(View view) {
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(ProfileActivity.PROFILE_TYPE, ProfileActivity.USER_PROFILE);
+        bundle.putString(ProfileActivity.PROFILE_ID, currentUser.getUid());
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     public void onClickCategory(View view) {
-//        ViewGroup viewGroup = (ViewGroup) view;
-//        String categoryId = viewGroup.getContentDescription().toString();
-
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.CATEGORY_SEARCH);
-        bundle.putString(SearchActivity.CATEGORY_SEARCH, view.getContentDescription().toString());
+        bundle.putString(SearchActivity.SEARCH_ID, view.getContentDescription().toString());
         intent.putExtras(bundle);
         startActivity(intent);
+    }
 
-
-//        TextView textView = (TextView) viewGroup.getChildAt(0);
-//        Toast.makeText(getApplicationContext(), "Category Clicked:" + viewGroup.getContentDescription(), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 }

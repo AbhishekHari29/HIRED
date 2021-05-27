@@ -164,18 +164,19 @@ public class AvailableService {
             @Override
             public void getBooleanResult(Boolean result) {
                 if (result) {
-                    Log.i("MESSAGE", "Service Added: "+result);
+                    Log.i("MESSAGE", "Service Added: " + result);
                     Service service = new Service();
                     service.setServiceId(serviceId);
                     service.incrementServiceCount(new ServiceInterface() {
                         @Override
                         public void getBooleanResult(Boolean result) {
-                            Log.i("MESSAGE", "Service Incremented: "+result);
+                            Log.i("MESSAGE", "Service Incremented: " + result);
                             serviceInterface.getBooleanResult(result);
                         }
                     });
+                } else {
+                    serviceInterface.getBooleanResult(false);
                 }
-                serviceInterface.getBooleanResult(false);
             }
         });
     }
@@ -193,8 +194,9 @@ public class AvailableService {
                         serviceInterface.getBooleanResult(result);
                     }
                 });
+            } else {
+                serviceInterface.getBooleanResult(false);
             }
-            serviceInterface.getBooleanResult(false);
         });
     }
 

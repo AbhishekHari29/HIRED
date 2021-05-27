@@ -45,7 +45,8 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
         }
 
         ImageView serviceImage = convertView.findViewById(R.id.service_image);
-        TextView serviceName = convertView.findViewById(R.id.service_title);
+        TextView userName = convertView.findViewById(R.id.service_title);
+        TextView serviceName = convertView.findViewById(R.id.service_sub_title);
         RatingBar serviceRating = convertView.findViewById(R.id.service_rating);
         TextView availability = convertView.findViewById(R.id.service_availability);
         ImageView availabilityIcon = convertView.findViewById(R.id.service_availability_icon);
@@ -55,7 +56,10 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
 
         convertView.setContentDescription(serviceHelper.getServiceId());
         serviceImage.setImageResource(serviceHelper.getServiceImage());
+        userName.setText(serviceHelper.getUserName());
+        userName.setContentDescription(serviceHelper.getUserId());
         serviceName.setText(serviceHelper.getServiceName());
+        serviceName.setContentDescription(serviceHelper.getServiceId());
         serviceRating.setRating(serviceHelper.getServiceRating());
         if (serviceHelper.isAvailability()) {
             availability.setText(R.string.available);
@@ -66,6 +70,7 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
         }
         timeFrom.setText(serviceHelper.getTimeFrom());
         timeTo.setText(serviceHelper.getTimeTo());
+        workingDays.setContentDescription(serviceHelper.getWorkingDays());
         for (int i = 0; i < 7; i++) {
             if (serviceHelper.getWorkingDays().charAt(i) == '0') {
                 ImageView dayView = (ImageView) workingDays.getChildAt(i);
@@ -99,7 +104,10 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (AvailableServiceHelper serviceHelper : serviceHelpersAll)
-                    if (serviceHelper.getServiceName().toLowerCase().contains(filterPattern) || serviceHelper.getServiceId().toLowerCase().startsWith(filterPattern) )
+                    if (serviceHelper.getServiceName().toLowerCase().contains(filterPattern) ||
+                            serviceHelper.getServiceId().toLowerCase().startsWith(filterPattern) ||
+                            serviceHelper.getUserName().toLowerCase().startsWith(filterPattern) ||
+                            serviceHelper.getUserId().toLowerCase().startsWith(filterPattern))
                         filteredServices.add(serviceHelper);
             }
 

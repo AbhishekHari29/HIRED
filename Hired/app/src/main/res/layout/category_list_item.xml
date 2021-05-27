@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@android:color/white"
+    android:background="@color/grey"
     android:onClick="onClickServiceItem">
 
     <TextView
@@ -17,6 +17,6 @@
         android:fontFamily="@font/muli"
         android:text="List Item"
         android:textColor="@color/colorAccent"
-        android:paddingLeft="60dp"/>
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"/>
 
 </LinearLayout>

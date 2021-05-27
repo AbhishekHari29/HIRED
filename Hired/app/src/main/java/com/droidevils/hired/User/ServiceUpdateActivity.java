@@ -46,10 +46,7 @@ public class ServiceUpdateActivity extends AppCompatActivity {
     private Button timeFromBtn;
     private Button timeToBtn;
     private MaterialDayPicker workingDayPicker;
-    private CheckBox availabilityCheckBox;
     private SwitchMaterial availabilitySwitch;
-    private Button updateButton;
-    private Button cancelButton;
     private int hr1, hr2, min1, min2;
     private MaterialDayPicker.Weekday[] days;
 
@@ -79,10 +76,7 @@ public class ServiceUpdateActivity extends AppCompatActivity {
         timeFromBtn = findViewById(R.id.service_time_from);
         timeToBtn = findViewById(R.id.service_time_to);
         workingDayPicker = findViewById(R.id.service_working_day_picker);
-        availabilityCheckBox = findViewById(R.id.service_availability_checkbox);
         availabilitySwitch = findViewById(R.id.service_availability_switch);
-        updateButton = findViewById(R.id.update_button);
-        cancelButton = findViewById(R.id.cancel_button);
 
         days = new MaterialDayPicker.Weekday[]{
                 MaterialDayPicker.Weekday.SUNDAY,
@@ -99,6 +93,15 @@ public class ServiceUpdateActivity extends AppCompatActivity {
         serviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, serviceNames);
         serviceAtv.setAdapter(serviceAdapter);
         retrieveServiceInformation();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            serviceType = extras.getString(SERVICE_OPERATION);
+            if (serviceType != null && serviceType.equals(SERVICE_MODIFY)) {
+                serviceId = extras.getString(SERVICE_ID);
+                getExistingService();
+            }
+        }
 
         //Time Picker
         timeFromBtn.setOnClickListener(v -> {
@@ -125,16 +128,6 @@ public class ServiceUpdateActivity extends AppCompatActivity {
             timePickerDialog.updateTime(hr2, min2);
             timePickerDialog.show();
         });
-
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            serviceType = extras.getString(SERVICE_OPERATION);
-            if (serviceType.equals(SERVICE_MODIFY)) {
-                serviceId = extras.getString(SERVICE_ID);
-                getExistingService();
-            }
-        }
     }
 
     private void getExistingService() {
@@ -144,21 +137,21 @@ public class ServiceUpdateActivity extends AppCompatActivity {
             public void getServiceById(AvailableService service) {
                 if (service != null) {
                     ServiceUpdateActivity.this.availableService = service;
-
                     serviceAtv.setText(availableService.getServiceName(), false);
                     timeFromBtn.setText(availableService.getTimeFrom());
                     timeToBtn.setText(availableService.getTimeTo());
-                    availabilityCheckBox.setChecked(availableService.isAvailability());
+                    availabilitySwitch.setChecked(availableService.isAvailability());
                     String workingDays = availableService.getWorkingDays();
                     List<MaterialDayPicker.Weekday> workingDaysList = new ArrayList<>();
                     for (int i = 0; i < 7; i++)
                         if (workingDays.charAt(i) == '1')
                             workingDaysList.add(days[i]);
                     workingDayPicker.setSelectedDays(workingDaysList);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No Service found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
     private void retrieveServiceInformation() {
@@ -170,13 +163,11 @@ public class ServiceUpdateActivity extends AppCompatActivity {
                     for (Service service : services)
                         serviceNames.add(service.getServiceName());
                     serviceAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(), "ServiceList Missing", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    public void goBackButton(View view) {
-        onBackPressed();
     }
 
     public void onClickUpdate(View view) {
@@ -184,34 +175,58 @@ public class ServiceUpdateActivity extends AppCompatActivity {
         //Validate
         if (!validateService())
             return;
-
         UserBean.getUserById(currentUserId, new UserInterface() {
             @Override
             public void getUserById(UserBean userBean) {
-
-                String serviceName = serviceAtv.getText().toString();
-                String serviceId = serviceList.get(serviceNames.indexOf(serviceName)).getServiceId();
-                String userName = userBean.getFullName();
-                String timeFrom = timeFromBtn.getText().toString().trim();
-                String timeTo = timeToBtn.getText().toString().trim();
-                String workingDays = "";
-                List<MaterialDayPicker.Weekday> workingDaysList = workingDayPicker.getSelectedDays();
-                for (int i = 0; i < 7; i++) {
-                    workingDays += (workingDaysList.contains(days[i])) ? "1" : "0";
-                }
-                float rating = new Random().nextInt() % 6;
-                Boolean availability = availabilityCheckBox.isChecked();
-                AvailableService availableService = new AvailableService(currentUserId, userName, serviceId, serviceName, availability, timeFrom, timeTo, workingDays, rating);
-                availableService.addService(new AvailableServiceInterface() {
-                    @Override
-                    public void getBooleanResult(Boolean result) {
-                        Toast.makeText(ServiceUpdateActivity.this, "AvailableService Add:" + result, Toast.LENGTH_SHORT).show();
+                if (userBean != null) {
+                    String serviceName = serviceAtv.getText().toString();
+                    String serviceId = serviceList.get(serviceNames.indexOf(serviceName)).getServiceId();
+                    String userName = userBean.getFullName();
+                    String timeFrom = timeFromBtn.getText().toString().trim();
+                    String timeTo = timeToBtn.getText().toString().trim();
+                    String workingDays = "";
+                    List<MaterialDayPicker.Weekday> workingDaysList = workingDayPicker.getSelectedDays();
+                    for (int i = 0; i < 7; i++) {
+                        workingDays += (workingDaysList.contains(days[i])) ? "1" : "0";
                     }
-                });
+                    float rating = new Random().nextInt() % 6;
+                    Boolean availability = availabilitySwitch.isChecked();
+                    AvailableService availableService = new AvailableService(currentUserId, userName, serviceId, serviceName, availability, timeFrom, timeTo, workingDays, rating);
+
+                    // TODO returns false always
+                    switch (serviceType) {
+                        case SERVICE_ADD:
+                            availableService.addService(new AvailableServiceInterface() {
+                                @Override
+                                public void getBooleanResult(Boolean result) {
+                                    if (result){
+                                        Toast.makeText(getApplicationContext(), "Service Added", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Service not Added", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            break;
+                        case SERVICE_MODIFY:
+                        default:
+                            availableService.updateService(new AvailableServiceInterface() {
+                                @Override
+                                public void getBooleanResult(Boolean result) {
+                                    if (result){
+                                        Toast.makeText(getApplicationContext(), "Service Updated", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Service not Updated", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "UserName not found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
     }
 
     private boolean validateService() {
@@ -219,11 +234,16 @@ public class ServiceUpdateActivity extends AppCompatActivity {
         if (!Validation.validateDropDown(serviceLayout, serviceAtv)) {
             result = false;
         }
+        if (!serviceNames.contains(serviceAtv.getText().toString())) {
+            Toast.makeText(ServiceUpdateActivity.this, "Select from Service List", Toast.LENGTH_SHORT).show();
+            result = false;
+        }
         if (!Validation.validateTime(timeFromBtn.getText().toString().trim())) {
-            Toast.makeText(ServiceUpdateActivity.this, "Select Time:" + timeFromBtn.getText(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ServiceUpdateActivity.this, "Select Time", Toast.LENGTH_SHORT).show();
+            result = false;
         }
         if (!Validation.validateTime(timeToBtn.getText().toString().trim())) {
-            Toast.makeText(ServiceUpdateActivity.this, "Select Time:" + timeToBtn.getText(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ServiceUpdateActivity.this, "Select Time", Toast.LENGTH_SHORT).show();
             result = false;
         }
         if (workingDayPicker.getSelectedDays().size() == 0) {
@@ -231,6 +251,10 @@ public class ServiceUpdateActivity extends AppCompatActivity {
             result = false;
         }
         return result;
+    }
+
+    public void goBackButton(View view) {
+        onBackPressed();
     }
 
 }
