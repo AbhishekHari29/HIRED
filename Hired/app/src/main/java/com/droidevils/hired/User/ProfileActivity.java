@@ -25,6 +25,8 @@ import com.droidevils.hired.Helper.AvailableServiceHelper;
 import com.droidevils.hired.Helper.Bean.AvailableService;
 import com.droidevils.hired.Helper.Bean.AvailableServiceInterface;
 import com.droidevils.hired.Helper.Bean.ProfileBean;
+import com.droidevils.hired.Helper.Bean.UserBean;
+import com.droidevils.hired.Helper.Bean.UserInterface;
 import com.droidevils.hired.Helper.ProcessManager;
 import com.droidevils.hired.Helper.ServiceAdapter;
 import com.droidevils.hired.R;
@@ -370,6 +372,25 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.context_book_appointment:
 
                 //Book Appointment
+                Intent AppointmentIntent = new Intent(getApplicationContext(), AppointmentActivity.class);
+                Bundle extras = new Bundle();
+                // Service ID, Service Name, Service Provider ID, Service Provider Name,
+                //Service Reciever ID and Service Reciever name
+                extras.putString(AppointmentActivity.APPOINTMENT_OPERATION, AppointmentActivity.APPOINTMENT_ADD);
+                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
+                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
+                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
+                UserBean.getUserById(currentUser.getUid(), new UserInterface() {
+                    @Override
+                    public void getUserById(UserBean userBean) {
+                        extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, userBean.getFullName());
+                    }
+                });
+                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
+                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
+
+                AppointmentIntent.putExtras(extras);
+                startActivity(AppointmentIntent);
 
                 return true;
 
@@ -402,10 +423,10 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             case R.id.context_edit_service:
                 Intent serviceUpdateIntent = new Intent(getApplicationContext(), ServiceUpdateActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_MODIFY);
-                extras.putString(ServiceUpdateActivity.SERVICE_ID, serviceHelper.getServiceId());
-                serviceUpdateIntent.putExtras(extras);
+                Bundle appointmentExtras = new Bundle();
+                appointmentExtras.putString(ServiceUpdateActivity.SERVICE_OPERATION, ServiceUpdateActivity.SERVICE_MODIFY);
+                appointmentExtras.putString(ServiceUpdateActivity.SERVICE_ID, serviceHelper.getServiceId());
+                serviceUpdateIntent.putExtras(appointmentExtras);
                 startActivity(serviceUpdateIntent);
                 return true;
             case R.id.context_set_availability:
