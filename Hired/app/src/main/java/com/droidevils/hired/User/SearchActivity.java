@@ -21,9 +21,13 @@ import com.droidevils.hired.Helper.Bean.AvailableService;
 import com.droidevils.hired.Helper.Bean.AvailableServiceInterface;
 import com.droidevils.hired.Helper.Bean.Service;
 import com.droidevils.hired.Helper.Bean.ServiceInterface;
+import com.droidevils.hired.Helper.Bean.UserBean;
+import com.droidevils.hired.Helper.Bean.UserInterface;
 import com.droidevils.hired.Helper.ProcessManager;
 import com.droidevils.hired.Helper.ServiceAdapter;
 import com.droidevils.hired.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -51,10 +55,22 @@ public class SearchActivity extends AppCompatActivity {
     ListView searchResultListView;
     ServiceAdapter serviceAdapter;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null){
+            Toast.makeText(getApplicationContext(), "Please Login", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SearchActivity.this, LoginActivity.class);
+            finish();
+        }
 
         processManager = new ProcessManager(SearchActivity.this);
 
@@ -168,8 +184,25 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.context_book_appointment:
                 Toast.makeText(getApplicationContext(), "Book Appointment" + serviceHelper.getUserName(), Toast.LENGTH_LONG).show();
 
-
-
+                Intent AppointmentIntent = new Intent(getApplicationContext(), AppointmentActivity.class);
+//                extras = new Bundle();
+//                // Service ID, Service Name, Service Provider ID, Service Provider Name,
+//                //Service Reciever ID and Service Reciever name
+//                extras.putString(AppointmentActivity.APPOINTMENT_OPERATION, AppointmentActivity.APPOINTMENT_ADD);
+//                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
+//                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
+//                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
+//                UserBean.getUserById(currentUser.getUid(), new UserInterface() {
+//                    @Override
+//                    public void getUserById(UserBean userBean) {
+//                        extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, userBean.getFullName());
+//                    }
+//                });
+//                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
+//                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
+//
+//                AppointmentIntent.putExtras(extras);
+                startActivity(AppointmentIntent);
                 //Book Appointment
 
                 return true;

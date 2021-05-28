@@ -6,6 +6,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,8 +116,13 @@ public class Validation {
     }
 
 
-    public static boolean validateDate(View view) {
-        /* TODO Validate Date */
-        return true;
+    public static boolean validateDate(String value) {
+        String regexPattern = "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$";
+        Pattern compiledPattern = Pattern.compile(regexPattern);
+        if (value == null) {
+            return false;
+        }
+        Matcher m = compiledPattern.matcher(value) ;
+        return m.matches();
     }
 }
