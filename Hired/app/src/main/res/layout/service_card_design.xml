@@ -29,14 +29,20 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/service_image"
             android:fontFamily="@font/muli_black"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="Service Name"
             android:textColor="@color/colorAccent"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/service_sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:layout_below="@+id/service_title"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/service_image"

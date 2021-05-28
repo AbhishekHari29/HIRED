@@ -5,6 +5,6 @@ import java.util.ArrayList;
 public interface AppointmentInterface {
     public default void getBooleanResult(Boolean result){};
     public default void getAppointmentById(Appointment appointment){};
-    public default void getAllAppointment(ArrayList<Appointment> appointments){};
+    public default void getAppointmentArrayList(ArrayList<Appointment> appointments){};
 
 }

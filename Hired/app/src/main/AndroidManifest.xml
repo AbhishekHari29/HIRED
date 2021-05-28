@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hired">
-        <activity android:name=".User.AppointmentActivity"></activity>
+        <activity android:name=".User.AppointmentListActivity"></activity>
+        <activity android:name=".User.AppointmentBookActivity" />
         <activity android:name=".User.ServiceUpdateActivity" />
         <activity android:name=".User.SearchActivity" />
         <activity android:name=".User.CategoryActivity" />

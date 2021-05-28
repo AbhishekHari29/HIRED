@@ -58,9 +58,55 @@ public class Appointment {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         appointments.add(dataSnapshot.getValue(Appointment.class));
                     }
-                    appointmentInterface.getAllAppointment(appointments);
+                    appointmentInterface.getAppointmentArrayList(appointments);
                 } else {
-                    appointmentInterface.getAllAppointment(null);
+                    appointmentInterface.getAppointmentArrayList(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void getAppointmentByProviderId(String providerId, AppointmentInterface appointmentInterface){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Appointment");
+        reference.orderByChild("serviceProviderId").equalTo(providerId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot != null) {
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        appointments.add(dataSnapshot.getValue(Appointment.class));
+                    }
+                    appointmentInterface.getAppointmentArrayList(appointments);
+                } else {
+                    appointmentInterface.getAppointmentArrayList(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public static void getAppointmentByReceiverId(String receiverId, AppointmentInterface appointmentInterface){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Appointment");
+        reference.orderByChild("serviceReceiverId").equalTo(receiverId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot != null) {
+                    ArrayList<Appointment> appointments = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        appointments.add(dataSnapshot.getValue(Appointment.class));
+                    }
+                    appointmentInterface.getAppointmentArrayList(appointments);
+                } else {
+                    appointmentInterface.getAppointmentArrayList(null);
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.droidevils.hired.Helper.DashboardAdapter;
+package com.droidevils.hired.Helper.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +14,18 @@ import com.droidevils.hired.R;
 
 import java.util.ArrayList;
 
-public class FeaturedServiceAdapter extends RecyclerView.Adapter<FeaturedServiceAdapter.ServiceViewHolder> {
+public class MostViewedServiceAdapter extends RecyclerView.Adapter<MostViewedServiceAdapter.ServiceViewHolder> {
 
     ArrayList<ServiceHelper> featureServices;
 
-    public FeaturedServiceAdapter(ArrayList<ServiceHelper> featureServices) {
+    public MostViewedServiceAdapter(ArrayList<ServiceHelper> featureServices) {
         this.featureServices = featureServices;
     }
 
     @NonNull
     @Override
     public ServiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.featured_card_design, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.most_viewed_card_design, parent, false);
         return new ServiceViewHolder(view);
     }
 
@@ -52,10 +52,10 @@ public class FeaturedServiceAdapter extends RecyclerView.Adapter<FeaturedService
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            image = itemView.findViewById(R.id.featured_service_image);
-            rating = itemView.findViewById(R.id.featured_service_rating);
-            title = itemView.findViewById(R.id.featured_service_title);
-            desc = itemView.findViewById(R.id.featured_service_desc);
+            image = itemView.findViewById(R.id.most_viewed_image);
+            rating = itemView.findViewById(R.id.most_viewed_rating);
+            title = itemView.findViewById(R.id.most_viewed_title);
+            desc = itemView.findViewById(R.id.most_viewed_desc);
         }
     }
 }

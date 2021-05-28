@@ -1,4 +1,4 @@
-package com.droidevils.hired.Helper;
+package com.droidevils.hired.Helper.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

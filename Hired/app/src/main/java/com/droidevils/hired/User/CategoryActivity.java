@@ -14,8 +14,7 @@ import com.droidevils.hired.Helper.Bean.Category;
 import com.droidevils.hired.Helper.Bean.CategoryInterface;
 import com.droidevils.hired.Helper.Bean.Service;
 import com.droidevils.hired.Helper.Bean.ServiceInterface;
-import com.droidevils.hired.Helper.Bean.UserBean;
-import com.droidevils.hired.Helper.CategoryListAdaptor;
+import com.droidevils.hired.Helper.Adapter.CategoryListAdaptor;
 import com.droidevils.hired.R;
 
 import java.util.ArrayList;

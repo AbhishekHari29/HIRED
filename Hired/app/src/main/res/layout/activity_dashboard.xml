@@ -114,9 +114,9 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:layout_margin="10dp"
-                            android:onClick="gotoProfileActivity"
                             android:background="@drawable/card1"
-                            android:elevation="8dp">
+                            android:elevation="8dp"
+                            android:onClick="gotoProfileActivity">
 
                             <ImageView
                                 android:layout_width="30dp"
@@ -144,16 +144,16 @@
                         <RelativeLayout
                             android:layout_width="60dp"
                             android:layout_height="60dp"
-                            android:onClick="gotoCategoryActivity"
                             android:layout_margin="10dp"
                             android:background="@drawable/card2"
-                            android:elevation="8dp">
+                            android:elevation="8dp"
+                            android:onClick="gotoCategoryActivity">
 
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_baseline_category_24"/>
+                                android:src="@drawable/ic_baseline_category_24" />
 
 
                         </RelativeLayout>
@@ -177,13 +177,14 @@
                             android:layout_height="60dp"
                             android:layout_margin="10dp"
                             android:background="@drawable/card3"
-                            android:elevation="8dp">
+                            android:elevation="8dp"
+                            android:onClick="gotoAppointmentActivity">
 
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_baseline_chat_24" />
+                                android:src="@drawable/ic_baseline_edit_calendar_24" />
 
 
                         </RelativeLayout>
@@ -192,7 +193,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="Chat"
+                            android:text="Appointment"
                             android:textAlignment="center" />
 
                     </LinearLayout>
@@ -206,9 +207,9 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:layout_margin="10dp"
-                            android:onClick="gotoSearchActivity"
                             android:background="@drawable/card4"
-                            android:elevation="8dp">
+                            android:elevation="8dp"
+                            android:onClick="gotoSearchActivity">
 
                             <ImageView
                                 android:layout_width="30dp"

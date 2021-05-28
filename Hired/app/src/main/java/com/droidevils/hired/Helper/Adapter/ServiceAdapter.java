@@ -1,4 +1,4 @@
-package com.droidevils.hired.Helper;
+package com.droidevils.hired.Helper.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,10 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.droidevils.hired.Helper.Adapter.AvailableServiceHelper;
 import com.droidevils.hired.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> implements Filterable {
 

@@ -1,4 +1,4 @@
-package com.droidevils.hired.Helper;
+package com.droidevils.hired.Helper.Adapter;
 
 public class AvailableServiceHelper {
 

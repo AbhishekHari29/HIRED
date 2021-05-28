@@ -12,7 +12,6 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,17 +20,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.droidevils.hired.Helper.AvailableServiceHelper;
+import com.droidevils.hired.Helper.Adapter.AvailableServiceHelper;
 import com.droidevils.hired.Helper.Bean.AvailableService;
 import com.droidevils.hired.Helper.Bean.AvailableServiceInterface;
 import com.droidevils.hired.Helper.Bean.ProfileBean;
 import com.droidevils.hired.Helper.Bean.UserBean;
 import com.droidevils.hired.Helper.Bean.UserInterface;
 import com.droidevils.hired.Helper.ProcessManager;
-import com.droidevils.hired.Helper.ServiceAdapter;
+import com.droidevils.hired.Helper.Adapter.ServiceAdapter;
 import com.droidevils.hired.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -332,7 +329,6 @@ public class ProfileActivity extends AppCompatActivity {
         extras.putString(ProfileSetupActivity.PROFILE_OPERATION, ProfileSetupActivity.PROFILE_MODIFY);
         profileSetupIntent.putExtras(extras);
         startActivity(profileSetupIntent);
-        finish();
     }
 
     public void onClickBookmarkProfile(View view) {
@@ -370,28 +366,22 @@ public class ProfileActivity extends AppCompatActivity {
         AvailableServiceHelper serviceHelper = (AvailableServiceHelper) serviceHelpers.get((int) menuInfo.id);
         switch (item.getItemId()) {
             case R.id.context_book_appointment:
-
-                //Book Appointment
-                Intent AppointmentIntent = new Intent(getApplicationContext(), AppointmentActivity.class);
-                Bundle extras = new Bundle();
-                // Service ID, Service Name, Service Provider ID, Service Provider Name,
-                //Service Reciever ID and Service Reciever name
-                extras.putString(AppointmentActivity.APPOINTMENT_OPERATION, AppointmentActivity.APPOINTMENT_ADD);
-                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
-                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
-                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
                 UserBean.getUserById(currentUser.getUid(), new UserInterface() {
                     @Override
                     public void getUserById(UserBean userBean) {
-                        extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, userBean.getFullName());
+                        Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentBookActivity.class);
+                        Bundle extras = new Bundle();
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_OPERATION, AppointmentBookActivity.APPOINTMENT_ADD);
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, (userBean != null) ? userBean.getFullName() : "");
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
+                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
+                        appointmentIntent.putExtras(extras);
+                        startActivity(appointmentIntent);
                     }
                 });
-                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
-                extras.putString(AppointmentActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
-
-                AppointmentIntent.putExtras(extras);
-                startActivity(AppointmentIntent);
-
                 return true;
 
             case R.id.context_delete_service:
@@ -409,7 +399,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 service.deleteService(new AvailableServiceInterface() {
                                     @Override
                                     public void getBooleanResult(Boolean result) {
-                                        Toast.makeText(getApplicationContext(), result?"Service Deleted":"Service couldn't be Deleted", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), result ? "Service Deleted" : "Service couldn't be Deleted", Toast.LENGTH_SHORT).show();
                                         if (result) {
                                             serviceHelpers.remove((int) menuInfo.id);
                                             serviceAdapter.notifyDataSetChanged();

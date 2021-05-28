@@ -1,4 +1,4 @@
-package com.droidevils.hired.Helper.DashboardAdapter;
+package com.droidevils.hired.Helper.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

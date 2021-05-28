@@ -21,6 +21,10 @@
             android:id="@+id/nav_chat"
             android:title="Chat"
             android:icon="@drawable/ic_baseline_chat_24"/>
+        <item
+            android:id="@+id/nav_appointment"
+            android:title="Appointment"
+            android:icon="@drawable/ic_baseline_edit_calendar_24"/>
 
     </group>
 
@@ -47,24 +51,24 @@
         </menu>
     </item>
 
-    <item android:title="Categories">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_category1"
-                    android:title="Category1"
-                    android:icon="@drawable/user_shape"/>
-                <item
-                    android:id="@+id/nav_category2"
-                    android:title="Category2"
-                    android:icon="@drawable/user_shape"/>
-                <item
-                    android:id="@+id/nav_category3"
-                    android:title="Category3"
-                    android:icon="@drawable/user_shape"/>
-            </group>
-        </menu>
-    </item>
+<!--    <item android:title="Categories">-->
+<!--        <menu>-->
+<!--            <group android:checkableBehavior="single">-->
+<!--                <item-->
+<!--                    android:id="@+id/nav_category1"-->
+<!--                    android:title="Category1"-->
+<!--                    android:icon="@drawable/user_shape"/>-->
+<!--                <item-->
+<!--                    android:id="@+id/nav_category2"-->
+<!--                    android:title="Category2"-->
+<!--                    android:icon="@drawable/user_shape"/>-->
+<!--                <item-->
+<!--                    android:id="@+id/nav_category3"-->
+<!--                    android:title="Category3"-->
+<!--                    android:icon="@drawable/user_shape"/>-->
+<!--            </group>-->
+<!--        </menu>-->
+<!--    </item>-->
 
     <item android:title="Share">
         <menu>

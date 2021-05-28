@@ -14,21 +14,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidevils.hired.Helper.Bean.Category;
 import com.droidevils.hired.Helper.Bean.CategoryInterface;
-import com.droidevils.hired.Helper.DashboardAdapter.CategoryAdapter;
-import com.droidevils.hired.Helper.DashboardAdapter.CategoryHelper;
-import com.droidevils.hired.Helper.DashboardAdapter.FeaturedServiceAdapter;
-import com.droidevils.hired.Helper.DashboardAdapter.MostViewedServiceAdapter;
-import com.droidevils.hired.Helper.DashboardAdapter.ServiceHelper;
-import com.droidevils.hired.Helper.Bean.UserBean;
+import com.droidevils.hired.Helper.Adapter.CategoryAdapter;
+import com.droidevils.hired.Helper.Adapter.CategoryHelper;
+import com.droidevils.hired.Helper.Adapter.FeaturedServiceAdapter;
+import com.droidevils.hired.Helper.Adapter.MostViewedServiceAdapter;
+import com.droidevils.hired.Helper.Adapter.ServiceHelper;
 import com.droidevils.hired.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +35,10 @@ import java.util.ArrayList;
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final float END_SCALE = 0.7f;
+
+    //TODO Location Optimization
+    //TODO Notification
+    //TODO Dashboard Services
 
     RecyclerView featuredServiceRecycler, mostViewedRecycler, categoryRecycler;
     RecyclerView.Adapter featuredServiceAdapter, mostViewedServiceAdapter, categoryAdapter;
@@ -210,9 +210,17 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             case R.id.nav_search:
                 gotoSearchActivity(new View(this));
                 break;
+            case R.id.nav_appointment:
+                gotoAppointmentActivity(new View(this));
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void gotoAppointmentActivity(View view){
+        Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentListActivity.class);
+        startActivity(appointmentIntent);
     }
 
     public void gotoSearchActivity(View view) {
