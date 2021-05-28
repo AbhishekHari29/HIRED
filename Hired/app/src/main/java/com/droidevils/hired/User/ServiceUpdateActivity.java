@@ -39,6 +39,7 @@ public class ServiceUpdateActivity extends AppCompatActivity {
     public static final String SERVICE_ADD = "SERVICE_ADD";
     public static final String SERVICE_MODIFY = "SERVICE_MODIFY";
     public static final String SERVICE_ID = "SERVICE_ID";
+
     private String currentUserId, serviceType, serviceId;
 
     private TextInputLayout serviceLayout;
@@ -175,6 +176,8 @@ public class ServiceUpdateActivity extends AppCompatActivity {
         //Validate
         if (!validateService())
             return;
+
+
         UserBean.getUserById(currentUserId, new UserInterface() {
             @Override
             public void getUserById(UserBean userBean) {

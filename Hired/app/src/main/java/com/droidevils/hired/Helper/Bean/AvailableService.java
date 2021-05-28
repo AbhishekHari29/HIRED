@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -203,8 +205,11 @@ public class AvailableService {
     public void updateService(AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
-        reference.child(serviceId).child(userId).setValue(this).addOnCompleteListener(task -> {
-            serviceInterface.getBooleanResult(task.isSuccessful());
+        reference.child(serviceId).child(userId).setValue(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                serviceInterface.getBooleanResult(task.isSuccessful());
+            }
         });
     }
 

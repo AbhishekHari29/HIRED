@@ -168,6 +168,8 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.context_book_appointment:
                 Toast.makeText(getApplicationContext(), "Book Appointment" + serviceHelper.getUserName(), Toast.LENGTH_LONG).show();
 
+
+
                 //Book Appointment
 
                 return true;
