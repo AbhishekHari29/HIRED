@@ -1,7 +1,10 @@
 package com.droidevils.hired.Helper.Bean;
 
+import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
 
+import com.droidevils.hired.Helper.Adapter.AvailableServiceHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,6 +16,8 @@ import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,6 +49,26 @@ public class UserLocation {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void getAllLocation(UserLocationInterface userLocationInterface){
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference reference = rootNode.getReference("Location");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String,UserLocation> distanceMap = new HashMap<>();
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    distanceMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(UserLocation.class));
+                }
+                userLocationInterface.getLocationHashMap(distanceMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                userLocationInterface.getLocationHashMap(null);
+            }
+        });
     }
 
     public static void getLocationByUserId(String userId, UserLocationInterface userLocationInterface){
@@ -92,8 +117,8 @@ public class UserLocation {
         return location1.computeDistance(location2);
     }
 
-    public void displayLocation() {
-        System.out.println("Lat' " + latitude + " : " + "Long' " + longitude);
+    public String displayLocation() {
+        return "Lat' " + latitude + " : " + "Long' " + longitude;
     }
 
     public double getLatitude() {
@@ -119,4 +144,5 @@ public class UserLocation {
     public void setAddress(String address) {
         this.address = address;
     }
+
 }

@@ -12,21 +12,9 @@ import java.util.ArrayList;
 public class TempMain {
 
     public void main() {
-        AvailableService.getServiceByUser("wI59zdKVx7fiKLj33szg1bYEbVJ2", new AvailableServiceInterface() {
-            @Override
-            public void getServiceArrayList(ArrayList<AvailableService> services) {
-                if (services != null)
-                    if (services.size() > 0) {
-                        for (AvailableService availableService : services)
-                            availableService.displayService();
-                    } else {
-                        Log.i("MESSAGE", "Size Zero");
-                    }
-                else {
-                    Log.i("MESSAGE", "Service Null");
-                }
-            }
-        });
+
+
+
     }
 
     private void countAvailableService() {

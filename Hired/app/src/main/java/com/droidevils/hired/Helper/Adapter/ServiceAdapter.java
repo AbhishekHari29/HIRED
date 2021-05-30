@@ -21,6 +21,8 @@ import com.droidevils.hired.R;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> implements Filterable {
 
@@ -115,7 +117,6 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
                             serviceHelper.getUserId().toLowerCase().startsWith(filterPattern))
                         filteredServices.add(serviceHelper);
             }
-
             FilterResults filterResults = new FilterResults();
             filterResults.values = filteredServices;
             return filterResults;
@@ -125,7 +126,18 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
         protected void publishResults(CharSequence constraint, FilterResults results) {
             serviceHelpers.clear();
             serviceHelpers.addAll((ArrayList) results.values);
+            sortByDistance();
             notifyDataSetChanged();
         }
     };
+
+    private void sortByDistance() {
+        Collections.sort(serviceHelpers, new Comparator<AvailableServiceHelper>() {
+            @Override
+            public int compare(AvailableServiceHelper o1, AvailableServiceHelper o2) {
+                return Double.compare(o1.getDistance(), o2.getDistance());
+            }
+        });
+    }
+
 }

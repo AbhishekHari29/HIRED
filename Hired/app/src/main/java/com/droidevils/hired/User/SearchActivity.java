@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -26,6 +30,7 @@ import android.widget.Toast;
 import com.droidevils.hired.Helper.Adapter.AvailableServiceHelper;
 import com.droidevils.hired.Helper.Bean.AvailableService;
 import com.droidevils.hired.Helper.Bean.AvailableServiceInterface;
+import com.droidevils.hired.Helper.Bean.ProfileBean;
 import com.droidevils.hired.Helper.Bean.Service;
 import com.droidevils.hired.Helper.Bean.ServiceInterface;
 import com.droidevils.hired.Helper.Bean.UserBean;
@@ -49,16 +54,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class SearchActivity extends AppCompatActivity {
+import javax.xml.parsers.ParserConfigurationException;
 
-    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-    private static final int REQUEST_CHECK_SETTINGS = 1;
+public class SearchActivity extends AppCompatActivity {
 
     public static final String SEARCH_TYPE = "SEARCH_TYPE";
     public static final String SEARCH_ID = "SEARCH_ID";
@@ -67,22 +75,23 @@ public class SearchActivity extends AppCompatActivity {
     public static final String CATEGORY_SEARCH = "CATEGORY_SEARCH";
     public static final String USER_SEARCH = "USER_SEARCH";
 
-    private ProcessManager processManager;
-    FusedLocationProviderClient fusedLocationProviderClient;
-
     private String searchType;
     private String searchId;
 
+    private ProcessManager processManager;
+
+    //Location
+    private final int PERMISSION_ID = 44;
+    private final int REQUEST_CHECK_SETTINGS = 1;
+    private FusedLocationProviderClient mFusedLocationClient;
     private UserLocation currentUserLocation;
 
     private SearchView searchView;
+    private ListView searchResultListView;
 
-    ArrayList<AvailableService> availableServices;
-    ArrayList<Service> myServices;
-
-    ArrayList<AvailableServiceHelper> serviceHelpers;
-    ListView searchResultListView;
-    ServiceAdapter serviceAdapter;
+    private ArrayList<AvailableService> availableServices;
+    private ArrayList<AvailableServiceHelper> serviceHelpers;
+    private ServiceAdapter serviceAdapter;
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -98,12 +107,14 @@ public class SearchActivity extends AppCompatActivity {
         if (currentUser == null) {
             Toast.makeText(getApplicationContext(), "Please Login", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(SearchActivity.this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
 
         processManager = new ProcessManager(SearchActivity.this);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //        getCurrentLocation();
 
         processManager.incrementProcessCount();//1
@@ -111,7 +122,6 @@ public class SearchActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_view);
 
         availableServices = new ArrayList<>();
-        myServices = new ArrayList<>();
         serviceHelpers = new ArrayList<>();
         serviceAdapter = new ServiceAdapter(SearchActivity.this, serviceHelpers);
         searchResultListView.setAdapter(serviceAdapter);
@@ -163,7 +173,8 @@ public class SearchActivity extends AppCompatActivity {
                                 availableService.getWorkingDays()));
                     serviceAdapter.setOriginalList(serviceHelpers);
                     serviceAdapter.notifyDataSetChanged();
-                    getCurrentLocation();
+//                    getCurrentLocation();
+                    getLastLocation();
                     //Filter Result
                     if (searchType != null && !searchType.equals("")) {
                         serviceAdapter.getFilter().filter(searchId);
@@ -176,68 +187,86 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void retrieveServiceInformation() {
-        processManager.incrementProcessCount();
-        Service.getAllService(new ServiceInterface() {
-            @Override
-            public void getServiceArrayList(ArrayList<Service> services) {
-                if (services != null && services.size() > 0) {
-                    myServices.addAll(services);
-                    // DO something with data
-                }
-                processManager.decrementProcessCount();
-            }
-        });
-    }
-
     //Location
-    private void getCurrentLocation() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        if (checkPermissions()) {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(SearchActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                fusedLocationProviderClient.removeLocationUpdates(this);
-                if (locationResult != null && locationResult.getLocations().size() > 0) {
-                    int lastLocationIndex = locationResult.getLocations().size() - 1;
-                    Location location = locationResult.getLocations().get(lastLocationIndex);
-                    Toast.makeText(SearchActivity.this, "Lat: " + location.getLatitude() + " , Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                    currentUserLocation = new UserLocation(location.getLatitude(), location.getLongitude());
-                    optimizeServiceByLocation(currentUserLocation);
-                }
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location == null) {
+                            requestNewLocationData();
+                        } else {
+                            currentUserLocation = new UserLocation(location.getLatitude(), location.getLongitude());
+                            FirebaseDatabase.getInstance().getReference("Location").child(currentUser.getUid()).setValue(currentUserLocation);
+                            optimizeServiceByLocation(currentUserLocation);
+                        }
+                    }
+                });
+            } else {
+//                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                startActivity(intent);
+                enableLocationService();
             }
-        }, Looper.getMainLooper());
+        } else {
+            requestPermissions();
+        }
     }
 
-    private void getUserCurrentLocation(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(SearchActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-            return;
-        }
-        //check if GPS is ON
-        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        // object with appropriate methods
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        LocationCallback mLocationCallback = new LocationCallback() {
+
             @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                Location location = task.getResult();
-                if (location != null) {
-                    Toast.makeText(SearchActivity.this, "Lat: " + location.getLatitude() + " , Long: " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(SearchActivity.this, "Location Not found", Toast.LENGTH_LONG).show();
-                    turnOnLocationService();
-                }
+            public void onLocationResult(LocationResult locationResult) {
+                Location mLastLocation = locationResult.getLastLocation();
+                currentUserLocation = new UserLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                FirebaseDatabase.getInstance().getReference("Location").child(currentUser.getUid()).setValue(currentUserLocation);
+                optimizeServiceByLocation(currentUserLocation);
             }
-        });
+        };
+
+        // setting LocationRequest
+        // on FusedLocationClient
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
 
-    private void turnOnLocationService() {
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        // If we want background location
+        // on Android 10.0 and higher,
+        // use:
+        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    private void enableLocationService() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(5000);
@@ -250,7 +279,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
                 try {
                     LocationSettingsResponse response = task.getResult(ApiException.class);
-                    Toast.makeText(SearchActivity.this, "GPS On", Toast.LENGTH_LONG).show();
+                    getLastLocation();
                 } catch (ApiException e) {
                     switch (e.getStatusCode()) {
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -270,45 +299,28 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void optimizeServiceByLocation(UserLocation location){
-        HashMap<String,Double> distanceMap = new HashMap<>();
-        for (AvailableServiceHelper availableServiceHelper:serviceHelpers){
-            if (distanceMap.get(availableServiceHelper.getUserId()) != null){
-                availableServiceHelper.setDistance(distanceMap.get(availableServiceHelper.getUserId()));
-            } else {
-                UserLocation.getLocationByUserId(availableServiceHelper.getUserId(), new UserLocationInterface() {
-                    @Override
-                    public void getLocation(UserLocation userLocation) {
-                        if (userLocation!=null){
-                            Log.i("MESSAGE", "Iterating Location");
-                            double distance = location.computeDistance(userLocation);
-                            distanceMap.put(availableServiceHelper.getUserId(), distance);
-                            availableServiceHelper.setDistance(distance);
-                        }
-//                    else {
-//                        ProfileBean.getLocationByPinCode(availableServiceHelper.getUserId(), new UserLocationInterface() {
-//                            @Override
-//                            public void getLocation(UserLocation userLocation) {
-//                                if (userLocation!=null){
-//                                    availableServiceHelper.setDistance(location.computeDistance(userLocation));
-//                                }
-//                            }
-//                        });
-//                    }
-                    }
-                });
+    private void optimizeServiceByLocation(UserLocation location) {
+
+        UserLocation.getAllLocation(new UserLocationInterface() {
+            @Override
+            public void getLocationHashMap(HashMap<String, UserLocation> locationMap) {
+                if (locationMap != null && locationMap.size() > 0) {
+                    for (AvailableServiceHelper helper : serviceHelpers)
+                        if (locationMap.get(helper.getUserId()) != null
+                                // Filtering out current user
+                                && !currentUser.getUid().equals(helper.getUserId())
+                        )
+                            helper.setDistance(location.computeDistance(locationMap.get(helper.getUserId())));
+                    serviceAdapter.notifyDataSetChanged();
+                    sortByDistance();
+                }
             }
+        });
 
-        }
-
-//        int min = 2;
-//        int max = 400;
-//        for (AvailableServiceHelper availableServiceHelper:serviceHelpers)
-//            availableServiceHelper.setDistance(Math.random()*(max-min+1)+min);
-        sortByDistance();
     }
 
-    private void sortByDistance(){
+
+    private void sortByDistance() {
         Collections.sort(serviceHelpers, new Comparator<AvailableServiceHelper>() {
             @Override
             public int compare(AvailableServiceHelper o1, AvailableServiceHelper o2) {
@@ -369,15 +381,10 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CHECK_SETTINGS){
-            switch (resultCode){
-                case Activity.RESULT_OK:
-                    Toast.makeText(SearchActivity.this, "GPS Turned On", Toast.LENGTH_LONG).show();
-                    getUserCurrentLocation();
-                    break;
-                case Activity.RESULT_CANCELED:
-                    Toast.makeText(SearchActivity.this, "GPS needed to be On", Toast.LENGTH_LONG).show();
-                    break;
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(SearchActivity.this, "GPS Turned On", Toast.LENGTH_LONG).show();
+                getLastLocation();
             }
         }
     }
@@ -386,13 +393,11 @@ public class SearchActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(SearchActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
             }
         }
-
     }
+
 }

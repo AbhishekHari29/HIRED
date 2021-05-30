@@ -158,7 +158,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
         profileReference = rootNode.getReference("Profile");
         userReference = rootNode.getReference("User");
         firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
+        storageReference = firebaseStorage.getReference("Profile");
 
 
         Bundle extras = getIntent().getExtras();

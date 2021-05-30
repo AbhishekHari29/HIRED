@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,8 +38,12 @@ import com.droidevils.hired.Helper.Adapter.ServiceHelper;
 import com.droidevils.hired.Helper.Bean.Service;
 import com.droidevils.hired.Helper.Bean.ServiceInterface;
 import com.droidevils.hired.Helper.Bean.UserLocation;
+import com.droidevils.hired.Helper.ProcessManager;
 import com.droidevils.hired.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,7 +60,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     static final float END_SCALE = 0.7f;
 
-    //TODO Notification
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    private ProcessManager processManager;
 
     RecyclerView featuredServiceRecycler, mostViewedRecycler, categoryRecycler;
     RecyclerView.Adapter featuredServiceAdapter, mostViewedServiceAdapter, categoryAdapter;
@@ -86,6 +95,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         } else {
             Toast.makeText(getApplicationContext(), "Welcome Back !", Toast.LENGTH_LONG).show();
         }
+
+        processManager = new ProcessManager(this);
+
+        processManager.incrementProcessCount();//1
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(DashboardActivity.this);
 
         //Update Location
         updateLocationToFirebase();
@@ -131,6 +145,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 return false;
             }
         });
+        processManager.decrementProcessCount();
     }
 
     private void updateLocationToFirebase() {
@@ -147,14 +162,47 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 Location location = task.getResult();
                 if (location != null) {
                     UserLocation userLocation = new UserLocation(location.getLatitude(), location.getLongitude());
+                    Toast.makeText(getApplicationContext(), userLocation.displayLocation(), Toast.LENGTH_LONG );
                     FirebaseDatabase.getInstance().getReference("Location").child(currentUser.getUid()).setValue(userLocation);
+                } else {
+                    requestNewLocationData();
                 }
             }
         });
     }
 
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        // object with appropriate methods
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        LocationCallback mLocationCallback = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Location mLastLocation = locationResult.getLastLocation();
+                UserLocation currentUserLocation = new UserLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                Toast.makeText(getApplicationContext(), currentUserLocation.displayLocation(), Toast.LENGTH_LONG );
+                FirebaseDatabase.getInstance().getReference("Location").child(currentUser.getUid()).setValue(currentUserLocation);
+            }
+        };
+
+        // setting LocationRequest
+        // on FusedLocationClient
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    }
+
     //Recycler View
     private void featuredServiceRecycler() {
+        processManager.incrementProcessCount();
+
         featuredServiceRecycler.setHasFixedSize(true);
         featuredServiceRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -175,15 +223,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
 
-
-//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 3.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.0, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-
-
+        processManager.decrementProcessCount();
     }
 
     private void mostViewedRecycler() {
+        processManager.incrementProcessCount();
         mostViewedRecycler.setHasFixedSize(true);
         mostViewedRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -203,10 +247,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 }
             }
         });
-
+        processManager.decrementProcessCount();
     }
 
     private void categoryRecycler() {
+        processManager.incrementProcessCount();
         categoryRecycler.setHasFixedSize(true);
         categoryRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -231,6 +276,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 }
             }
         });
+        processManager.decrementProcessCount();
     }
 
     //Navigation Functions
@@ -256,7 +302,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private void animateNavigationDrawer() {
         //Add any color or remove it to use the default one!
         //To make it transparent use Color.Transparent in side setScrimColor();
-        //drawerLayout.setScrimColor(Color.TRANSPARENT);
+//        drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayout.setScrimColor(getColor(R.color.blue_200));
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override

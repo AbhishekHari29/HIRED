@@ -130,36 +130,43 @@
             android:layout_toRightOf="@id/service_image">
 
             <ImageView
+                android:id="@+id/service_working_day_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
 
             <ImageView
+                android:id="@+id/service_working_day_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_circle_fill" />
