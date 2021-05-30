@@ -356,22 +356,26 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(profileIntent);
                 return true;
             case R.id.context_book_appointment:
-                UserBean.getUserById(currentUser.getUid(), new UserInterface() {
-                    @Override
-                    public void getUserById(UserBean userBean) {
-                        Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentBookActivity.class);
-                        Bundle extras = new Bundle();
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_OPERATION, AppointmentBookActivity.APPOINTMENT_ADD);
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, (userBean != null) ? userBean.getFullName() : "");
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
-                        appointmentIntent.putExtras(extras);
-                        startActivity(appointmentIntent);
-                    }
-                });
+                if (serviceHelper.isAvailability()) {
+                    UserBean.getUserById(currentUser.getUid(), new UserInterface() {
+                        @Override
+                        public void getUserById(UserBean userBean) {
+                            Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentBookActivity.class);
+                            Bundle extras = new Bundle();
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_OPERATION, AppointmentBookActivity.APPOINTMENT_ADD);
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, (userBean != null) ? userBean.getFullName() : "");
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
+                            appointmentIntent.putExtras(extras);
+                            startActivity(appointmentIntent);
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(),"Service is Unavailable", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 return super.onContextItemSelected(item);

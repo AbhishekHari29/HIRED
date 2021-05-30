@@ -228,7 +228,7 @@ public class ProfileActivity extends AppCompatActivity {
         processManager.decrementProcessCount();//1
     }
 
-    public void justifyListViewHeightBasedOnChildren (ListView listView) {
+    public void justifyListViewHeightBasedOnChildren(ListView listView) {
 
         ListAdapter adapter = listView.getAdapter();
 
@@ -251,7 +251,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void retrieveAvailableServiceInformation() {
         processManager.incrementProcessCount();
-        AvailableService.getServiceByUser( profileId, new AvailableServiceInterface() {
+        AvailableService.getServiceByUser(profileId, new AvailableServiceInterface() {
             @Override
             public void getServiceArrayList(ArrayList<AvailableService> services) {
                 if (services != null && services.size() > 0) {
@@ -385,22 +385,26 @@ public class ProfileActivity extends AppCompatActivity {
         AvailableServiceHelper serviceHelper = (AvailableServiceHelper) serviceHelpers.get((int) menuInfo.id);
         switch (item.getItemId()) {
             case R.id.context_book_appointment:
-                UserBean.getUserById(currentUser.getUid(), new UserInterface() {
-                    @Override
-                    public void getUserById(UserBean userBean) {
-                        Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentBookActivity.class);
-                        Bundle extras = new Bundle();
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_OPERATION, AppointmentBookActivity.APPOINTMENT_ADD);
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, (userBean != null) ? userBean.getFullName() : "");
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
-                        extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
-                        appointmentIntent.putExtras(extras);
-                        startActivity(appointmentIntent);
-                    }
-                });
+                if (serviceHelper.isAvailability()) {
+                    UserBean.getUserById(currentUser.getUid(), new UserInterface() {
+                        @Override
+                        public void getUserById(UserBean userBean) {
+                            Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentBookActivity.class);
+                            Bundle extras = new Bundle();
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_OPERATION, AppointmentBookActivity.APPOINTMENT_ADD);
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_ID, serviceHelper.getUserId());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_PROVIDER_NAME, serviceHelper.getUserName());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_ID, currentUser.getUid());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_RECEIVER_NAME, (userBean != null) ? userBean.getFullName() : "");
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_ID, serviceHelper.getServiceId());
+                            extras.putString(AppointmentBookActivity.APPOINTMENT_SERVICE_NAME, serviceHelper.getServiceName());
+                            appointmentIntent.putExtras(extras);
+                            startActivity(appointmentIntent);
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Service is Unavailable", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             case R.id.context_delete_service:
