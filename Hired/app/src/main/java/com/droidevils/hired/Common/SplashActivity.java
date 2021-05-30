@@ -3,21 +3,17 @@ package com.droidevils.hired.Common;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Pair;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.droidevils.hired.Helper.Bean.TempMain;
+import com.droidevils.hired.Admin.TempMain;
 import com.droidevils.hired.R;
 import com.droidevils.hired.User.DashboardActivity;
-import com.droidevils.hired.User.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import com.droidevils.hired.Helper.Adapter.AvailableServiceHelper;
 import com.droidevils.hired.R;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> implements Filterable {
@@ -53,6 +55,7 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
         TextView timeFrom = convertView.findViewById(R.id.service_time_from);
         TextView timeTo = convertView.findViewById(R.id.service_time_to);
         LinearLayout workingDays = convertView.findViewById(R.id.service_working_days);
+        TextView distance = convertView.findViewById(R.id.service_distance);
 
         convertView.setContentDescription(serviceHelper.getServiceId());
         serviceImage.setImageResource(serviceHelper.getServiceImage());
@@ -61,13 +64,8 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
         serviceName.setText(serviceHelper.getServiceName());
         serviceName.setContentDescription(serviceHelper.getServiceId());
         serviceRating.setRating(serviceHelper.getServiceRating());
-        if (serviceHelper.isAvailability()) {
-            availability.setText(R.string.available);
-            availabilityIcon.setImageResource(R.drawable.ic_tick_green_18dp);
-        } else {
-            availability.setText(R.string.unavailable);
-            availabilityIcon.setImageResource(R.drawable.ic_cross_red_18dp);
-        }
+        availability.setText(serviceHelper.isAvailability() ? R.string.available : R.string.unavailable);
+        availabilityIcon.setImageResource(serviceHelper.isAvailability() ? R.drawable.ic_tick_green_18dp : R.drawable.ic_cross_red_18dp);
         timeFrom.setText(serviceHelper.getTimeFrom());
         timeTo.setText(serviceHelper.getTimeTo());
         workingDays.setContentDescription(serviceHelper.getWorkingDays());
@@ -77,8 +75,15 @@ public class ServiceAdapter extends ArrayAdapter<AvailableServiceHelper> impleme
                 dayView.setImageResource(R.drawable.ic_circle_nofill);
             }
         }
+        distance.setText(serviceHelper.getDistance() == Double.MAX_VALUE ? "" : formatDistance(serviceHelper.getDistance()));
 //        return super.getView(position, convertView, parent);
         return convertView;
+    }
+
+    public String formatDistance(double value){
+        DecimalFormat df = new DecimalFormat("0.0");
+        df.setRoundingMode(RoundingMode.UP);
+        return String.format("%s Kms", df.format(value));
     }
 
     public void setOriginalList(ArrayList<AvailableServiceHelper> serviceHelpers) {

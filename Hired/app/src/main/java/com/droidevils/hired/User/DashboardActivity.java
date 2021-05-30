@@ -3,19 +3,26 @@ package com.droidevils.hired.User;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidevils.hired.Helper.Bean.Category;
@@ -25,23 +32,33 @@ import com.droidevils.hired.Helper.Adapter.CategoryHelper;
 import com.droidevils.hired.Helper.Adapter.FeaturedServiceAdapter;
 import com.droidevils.hired.Helper.Adapter.MostViewedServiceAdapter;
 import com.droidevils.hired.Helper.Adapter.ServiceHelper;
+import com.droidevils.hired.Helper.Bean.Service;
+import com.droidevils.hired.Helper.Bean.ServiceInterface;
+import com.droidevils.hired.Helper.Bean.UserLocation;
 import com.droidevils.hired.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     static final float END_SCALE = 0.7f;
 
-    //TODO Location Optimization
     //TODO Notification
-    //TODO Dashboard Services
 
     RecyclerView featuredServiceRecycler, mostViewedRecycler, categoryRecycler;
     RecyclerView.Adapter featuredServiceAdapter, mostViewedServiceAdapter, categoryAdapter;
+
+    SearchView searchView;
 
     //Drawer Menu
     ImageView menuButton;
@@ -70,11 +87,15 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             Toast.makeText(getApplicationContext(), "Welcome Back !", Toast.LENGTH_LONG).show();
         }
 
+        //Update Location
+        updateLocationToFirebase();
+
         featuredServiceRecycler = findViewById(R.id.featured_service_recycler);
         mostViewedRecycler = findViewById(R.id.most_viewed_recycler);
         categoryRecycler = findViewById(R.id.category_recycler);
         menuButton = findViewById(R.id.menu_button);
         contentView = findViewById(R.id.content);
+        searchView = findViewById(R.id.search_view);
 
         //Menu
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -93,6 +114,43 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         mostViewedRecycler();
         categoryRecycler();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.QUERY_SEARCH);
+                bundle.putString(SearchActivity.SEARCH_ID, query);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void updateLocationToFirebase() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(DashboardActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+            return;
+        }
+
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(DashboardActivity.this);
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if (location != null) {
+                    UserLocation userLocation = new UserLocation(location.getLatitude(), location.getLongitude());
+                    FirebaseDatabase.getInstance().getReference("Location").child(currentUser.getUid()).setValue(userLocation);
+                }
+            }
+        });
     }
 
     //Recycler View
@@ -101,12 +159,28 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         featuredServiceRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         ArrayList<ServiceHelper> featureServices = new ArrayList<>();
-        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 3.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.0, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-
         featuredServiceAdapter = new FeaturedServiceAdapter(featureServices);
         featuredServiceRecycler.setAdapter(featuredServiceAdapter);
+
+        String placeHolder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        Service.getTopNService(10, new ServiceInterface() {
+            @Override
+            public void getServiceArrayList(ArrayList<Service> services) {
+                if (services != null && services.size() > 0) {
+                    Collections.reverse(services);
+                    for (Service service:services)
+                        featureServices.add(new ServiceHelper(R.drawable.service1,service.getServiceId(), service.getServiceName(), service.getDescription().equals("")?placeHolder:service.getDescription(), 4 ));
+                    featuredServiceAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+
+//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 3.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
+//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.0, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
+//        featureServices.add(new ServiceHelper(R.drawable.service1, (float) 4.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
+
+
     }
 
     private void mostViewedRecycler() {
@@ -114,12 +188,22 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         mostViewedRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         ArrayList<ServiceHelper> mostViewedServices = new ArrayList<>();
-        mostViewedServices.add(new ServiceHelper(R.drawable.service1, (float) 3.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-        mostViewedServices.add(new ServiceHelper(R.drawable.service1, (float) 4.0, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-        mostViewedServices.add(new ServiceHelper(R.drawable.service1, (float) 4.5, "AC Services", "asbkd asudhlasn saudnas jasdjasl hisajdl asjdlnas"));
-
         mostViewedServiceAdapter = new MostViewedServiceAdapter(mostViewedServices);
         mostViewedRecycler.setAdapter(mostViewedServiceAdapter);
+
+        String placeHolder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        Service.getTopNService(10, new ServiceInterface() {
+            @Override
+            public void getServiceArrayList(ArrayList<Service> services) {
+                if (services != null && services.size() > 0) {
+                    Collections.reverse(services);
+                    for (Service service:services)
+                        mostViewedServices.add(new ServiceHelper(R.drawable.service1,service.getServiceId(), service.getServiceName(), service.getDescription().equals("")?placeHolder:service.getDescription(), 4 ));
+                    mostViewedServiceAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
     }
 
     private void categoryRecycler() {
@@ -140,8 +224,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 int gradientLength = gradientDrawables.length;
                 if (categories != null && categories.size() > 0) {
                     ArrayList<CategoryHelper> categoryHelpers = new ArrayList<>();
-                    for (Category category:categories)
-                        categoryHelpers.add(new CategoryHelper(R.drawable.chat, category.getCategoryName()+"::"+category.getCategoryId(), gradientDrawables[(gradientIndex++)%gradientLength]));
+                    for (Category category : categories)
+                        categoryHelpers.add(new CategoryHelper(R.drawable.chat, category.getCategoryId(),category.getCategoryName(), gradientDrawables[(gradientIndex++) % gradientLength]));
                     categoryAdapter = new CategoryAdapter(categoryHelpers);
                     categoryRecycler.setAdapter(categoryAdapter);
                 }
@@ -192,6 +276,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -218,7 +303,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
-    public void gotoAppointmentActivity(View view){
+    //Click Functions
+    public void gotoAppointmentActivity(View view) {
         Intent appointmentIntent = new Intent(getApplicationContext(), AppointmentListActivity.class);
         startActivity(appointmentIntent);
     }
@@ -242,11 +328,33 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         startActivity(intent);
     }
 
-    public void onClickCategory(View view) {
+    public void onClickCategoryCard(View view) {
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.CATEGORY_SEARCH);
         bundle.putString(SearchActivity.SEARCH_ID, view.getContentDescription().toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void onClickMostViewedCard(View view){
+        ViewGroup viewGroup = (ViewGroup) view;
+        String serviceId = (String) viewGroup.findViewById(R.id.most_viewed_title).getContentDescription();
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.SERVICE_SEARCH);
+        bundle.putString(SearchActivity.SEARCH_ID, serviceId);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void onClickFeaturedCard(View view){
+        ViewGroup viewGroup = (ViewGroup) view;
+        String serviceId = (String) viewGroup.findViewById(R.id.featured_service_title).getContentDescription();
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.SERVICE_SEARCH);
+        bundle.putString(SearchActivity.SEARCH_ID, serviceId);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -258,4 +366,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         else
             super.onBackPressed();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                updateLocationToFirebase();
+            } else {
+                Toast.makeText(DashboardActivity.this, "Permission Denied", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
 }

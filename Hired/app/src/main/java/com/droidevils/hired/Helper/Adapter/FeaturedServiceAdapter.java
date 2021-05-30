@@ -35,6 +35,7 @@ public class FeaturedServiceAdapter extends RecyclerView.Adapter<FeaturedService
         holder.image.setImageResource(serviceHelper.getImage());
         holder.rating.setRating(serviceHelper.getRating());
         holder.title.setText(serviceHelper.getTitle());
+        holder.title.setContentDescription(serviceHelper.getId());
         holder.desc.setText(serviceHelper.getDesc());
     }
 

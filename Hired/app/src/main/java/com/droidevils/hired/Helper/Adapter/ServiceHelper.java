@@ -3,22 +3,23 @@ package com.droidevils.hired.Helper.Adapter;
 public class ServiceHelper {
 
     private int image;
+    private String id, title, desc;
     private float rating;
-    private String title, desc;
 
-    public ServiceHelper(int image, float rating, String title, String desc) {
+    public ServiceHelper(int image, String id, String title, String desc, float rating) {
         this.image = image;
-        this.rating = rating;
+        this.id = id;
         this.title = title;
         this.desc = desc;
+        this.rating = rating;
     }
 
     public int getImage() {
         return image;
     }
 
-    public float getRating() {
-        return rating;
+    public String getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -27,5 +28,9 @@ public class ServiceHelper {
 
     public String getDesc() {
         return desc;
+    }
+
+    public float getRating() {
+        return rating;
     }
 }

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/card1"
-        android:onClick="onClickCategory"
+        android:onClick="onClickCategoryCard"
         android:padding="15dp">
 
         <TextView
@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/category_image"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:src="@drawable/chat" />

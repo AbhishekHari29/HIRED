@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.droidevils.hired.Helper.Bean.AvailableService;
@@ -135,7 +134,7 @@ public class ServiceUpdateActivity extends AppCompatActivity {
 
         AvailableService.getServiceById(currentUserId, serviceId, new AvailableServiceInterface() {
             @Override
-            public void getServiceById(AvailableService service) {
+            public void getService(AvailableService service) {
                 if (service != null) {
                     ServiceUpdateActivity.this.availableService = service;
                     serviceAtv.setText(availableService.getServiceName(), false);
@@ -158,7 +157,7 @@ public class ServiceUpdateActivity extends AppCompatActivity {
     private void retrieveServiceInformation() {
         Service.getAllService(new ServiceInterface() {
             @Override
-            public void getAllService(ArrayList<Service> services) {
+            public void getServiceArrayList(ArrayList<Service> services) {
                 if (services != null && services.size() > 0) {
                     serviceList = services;
                     for (Service service : services)
@@ -196,7 +195,6 @@ public class ServiceUpdateActivity extends AppCompatActivity {
                     Boolean availability = availabilitySwitch.isChecked();
                     AvailableService availableService = new AvailableService(currentUserId, userName, serviceId, serviceName, availability, timeFrom, timeTo, workingDays, rating);
 
-                    // TODO returns false always
                     switch (serviceType) {
                         case SERVICE_ADD:
                             availableService.addService(new AvailableServiceInterface() {

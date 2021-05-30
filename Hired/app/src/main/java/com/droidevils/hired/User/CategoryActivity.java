@@ -82,7 +82,7 @@ public class CategoryActivity extends AppCompatActivity {
                     listGroup.add(category.getCategoryName());
                     Service.getServiceByCategory(category.getCategoryId(), new ServiceInterface() {
                         @Override
-                        public void getServiceByCategory(ArrayList<Service> services) {
+                        public void getServiceArrayList(ArrayList<Service> services) {
                             ArrayList<String> serviceNames = new ArrayList<>();
                             for (Service service : services)
                                 serviceNames.add(service.getServiceName()+"::"+service.getServiceId());
@@ -97,7 +97,6 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     public void onClickServiceItem(View view){
-        Toast.makeText(CategoryActivity.this, "Clicked: " + view.getContentDescription(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(SearchActivity.SEARCH_TYPE, SearchActivity.SERVICE_SEARCH);

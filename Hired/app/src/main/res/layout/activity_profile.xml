@@ -243,7 +243,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--contact-->
+            <!--Tab Buttons-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -358,6 +358,7 @@
                     android:background="@color/lightgrey" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/reviewbtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -379,7 +380,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <!--About Me Card-->
                 <LinearLayout
@@ -667,7 +668,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/circularbordersolid"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -803,6 +805,7 @@
 
             <!--Review Bottom Cards-->
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

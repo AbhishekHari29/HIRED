@@ -12,10 +12,12 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -141,8 +143,6 @@ public class ProfileActivity extends AppCompatActivity {
         serviceListView.setAdapter(serviceAdapter);
         registerForContextMenu(serviceListView);
 
-        retrieveAvailableServiceInformation();
-
         /*making personal info visible*/
         personalInfoLayout.setVisibility(View.VISIBLE);
         serviceLayout.setVisibility(View.GONE);
@@ -186,6 +186,8 @@ public class ProfileActivity extends AppCompatActivity {
             profileId = "";
         }
 
+        retrieveAvailableServiceInformation();
+
         contactPhone.setOnClickListener(v -> openCallerIntent());
 
         contactEmail.setOnClickListener(v -> sendEmailIntent());
@@ -226,13 +228,32 @@ public class ProfileActivity extends AppCompatActivity {
         processManager.decrementProcessCount();//1
     }
 
+    public void justifyListViewHeightBasedOnChildren (ListView listView) {
+
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
+    }
+
     private void retrieveAvailableServiceInformation() {
         processManager.incrementProcessCount();
-
-        //TODO Query only User Service
-        AvailableService.getAllService(new AvailableServiceInterface() {
+        AvailableService.getServiceByUser( profileId, new AvailableServiceInterface() {
             @Override
-            public void getAllService(ArrayList<AvailableService> services) {
+            public void getServiceArrayList(ArrayList<AvailableService> services) {
                 if (services != null && services.size() > 0) {
                     availableServices.addAll(services);
                     for (AvailableService availableService : availableServices)
@@ -242,10 +263,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 availableService.getRating(), availableService.isAvailability(),
                                 availableService.getTimeFrom(), availableService.getTimeTo(),
                                 availableService.getWorkingDays()));
-                    serviceAdapter.setOriginalList(serviceHelpers);
                     serviceAdapter.notifyDataSetChanged();
-                    //Filter
-                    serviceAdapter.getFilter().filter(profileId);
+                    justifyListViewHeightBasedOnChildren(serviceListView);
                 }
                 processManager.decrementProcessCount();
             }

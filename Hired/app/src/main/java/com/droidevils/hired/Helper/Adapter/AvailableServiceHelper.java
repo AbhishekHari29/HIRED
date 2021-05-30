@@ -12,6 +12,7 @@ public class AvailableServiceHelper {
     private String timeFrom;
     private String timeTo;
     private String workingDays;
+    private double distance;
 
     public AvailableServiceHelper(int serviceImage, String userId, String userName, String serviceId, String serviceName, float serviceRating, boolean availability, String timeFrom, String timeTo, String workingDays) {
         this.serviceImage = serviceImage;
@@ -24,6 +25,7 @@ public class AvailableServiceHelper {
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
         this.workingDays = workingDays;
+        this.distance = Double.MAX_VALUE;
     }
 
     public int getServiceImage() {
@@ -68,5 +70,13 @@ public class AvailableServiceHelper {
 
     public void setAvailability(boolean availability) {
         this.availability = availability;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

@@ -54,12 +54,12 @@ public class AvailableService {
                         services.add(service);
                     }
                 }
-                serviceInterface.getAllService(services);
+                serviceInterface.getServiceArrayList(services);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                serviceInterface.getAllService(null);
+                serviceInterface.getServiceArrayList(null);
             }
         });
     }
@@ -68,7 +68,7 @@ public class AvailableService {
         ArrayList<AvailableService> availableServices = new ArrayList<>();
         Service.getServiceByName(serviceName, new ServiceInterface() {
             @Override
-            public void getServiceByName(ArrayList<Service> services) {
+            public void getServiceArrayList(ArrayList<Service> services) {
                 if (services != null && services.size() > 0) {
                     FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
                     DatabaseReference reference = rootNode.getReference("AvailableService");
@@ -79,42 +79,42 @@ public class AvailableService {
                                 AvailableService service = dataSnapshot.getValue(AvailableService.class);
                                 availableServices.add(service);
                             }
-                            serviceInterface.getServiceByName(availableServices);
+                            serviceInterface.getServiceArrayList(availableServices);
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            serviceInterface.getServiceByName(null);
+                            serviceInterface.getServiceArrayList(null);
                         }
                     });
                 } else {
-                    serviceInterface.getServiceByName(null);
+                    serviceInterface.getServiceArrayList(null);
 
                 }
             }
         });
     }
 
-    // TODO Doesn't work
     public static void getServiceByUser(String userId, AvailableServiceInterface serviceInterface) {
         FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
         DatabaseReference reference = rootNode.getReference("AvailableService");
-        reference.orderByValue().equalTo(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<AvailableService> services = new ArrayList<>();
                 for (DataSnapshot serviceSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot userSnapshot : serviceSnapshot.getChildren()) {
                         AvailableService service = userSnapshot.getValue(AvailableService.class);
-                        services.add(service);
+                        if (service.getUserId().equals(userId))
+                            services.add(service);
                     }
                 }
-                serviceInterface.getServiceByUser(services);
+                serviceInterface.getServiceArrayList(services);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                serviceInterface.getServiceByUser(null);
+                serviceInterface.getServiceArrayList(null);
             }
         });
     }
@@ -133,12 +133,12 @@ public class AvailableService {
                         services.add(service);
                     }
                 }
-                serviceInterface.getServiceByCategory(services);
+                serviceInterface.getServiceArrayList(services);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                serviceInterface.getServiceByCategory(null);
+                serviceInterface.getServiceArrayList(null);
             }
         });
     }
@@ -150,12 +150,12 @@ public class AvailableService {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 AvailableService service = snapshot.getValue(AvailableService.class);
-                serviceInterface.getServiceById(service);
+                serviceInterface.getService(service);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                serviceInterface.getServiceById(null);
+                serviceInterface.getService(null);
             }
         });
     }
@@ -232,7 +232,7 @@ public class AvailableService {
     public void displayService() {
         Log.i("MESSAGE", "---------------------------------------------");
         Log.i("MESSAGE", "UserID:\t" + userId);
-        Log.i("MESSAGE", "UserName:\t" + userId);
+        Log.i("MESSAGE", "UserName:\t" + userName);
         Log.i("MESSAGE", "ServiceID:\t" + serviceId);
         Log.i("MESSAGE", "ServiceName:\t" + serviceId);
         Log.i("MESSAGE", "Availability:\t" + availability);

@@ -1,5 +1,13 @@
 package com.droidevils.hired.Helper.Bean;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class ProfileBean {
 
     private String fullName, email, phone, summary;
@@ -10,6 +18,29 @@ public class ProfileBean {
     private boolean stillStudying, stillWorking;
 
     public ProfileBean() {
+    }
+
+    public static void getLocationByPinCode(String userId, UserLocationInterface userLocationInterface) {
+
+        FirebaseDatabase rootNode = FirebaseDatabase.getInstance();
+        DatabaseReference reference = rootNode.getReference("Profile");
+        reference.child(userId).child("pincode").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String pincode = snapshot.getValue(String.class);
+                if (pincode != null) {
+                    userLocationInterface.getLocation(UserLocation.getLocation(pincode));
+                } else {
+                    userLocationInterface.getLocation(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                userLocationInterface.getLocation(null);
+            }
+        });
+
     }
 
     public String getFullName() {
