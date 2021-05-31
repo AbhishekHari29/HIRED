@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/context_appointment_view"
-        android:title="View" />
+        android:id="@+id/context_appointment_view_profile"
+        android:title="View Profile" />
     <item
         android:id="@+id/context_appointment_respond"
         android:title="Respond" />

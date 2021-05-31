@@ -149,6 +149,14 @@ public class AppointmentBookFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         AppointmentHelper appointmentHelper = appointmentHelpers.get((int) menuInfo.id);
         switch (item.getItemId()) {
+            case R.id.context_appointment_view_profile:
+                Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(ProfileActivity.PROFILE_TYPE, ProfileActivity.OTHER_PROFILE);
+                extras.putString(ProfileActivity.PROFILE_ID, appointmentHelper.getUserId());
+                profileIntent.putExtras(extras);
+                startActivity(profileIntent);
+                return true;
             case R.id.context_appointment_edit:
                 UserBean.getUserById(currentUser.getUid(), new UserInterface() {
                     @Override

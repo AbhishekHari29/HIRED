@@ -1,6 +1,7 @@
 package com.droidevils.hired.User;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -130,8 +131,13 @@ public class AppointmentRequestFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         AppointmentHelper appointmentHelper = appointmentHelpers.get((int) menuInfo.id);
         switch (item.getItemId()) {
-            case R.id.context_appointment_view:
-                Toast.makeText(getActivity(), "View Appointment", Toast.LENGTH_SHORT).show();
+            case R.id.context_appointment_view_profile:
+                Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(ProfileActivity.PROFILE_TYPE, ProfileActivity.OTHER_PROFILE);
+                extras.putString(ProfileActivity.PROFILE_ID, appointmentHelper.getUserId());
+                profileIntent.putExtras(extras);
+                startActivity(profileIntent);
                 return true;
             case R.id.context_appointment_respond:
                 new MaterialAlertDialogBuilder(getActivity())
