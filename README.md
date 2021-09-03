@@ -4,7 +4,7 @@
 
 ### Description
 
-HIRED is the app which acts as a platform for everyone who is in pursuit of a job/service or is providing one, irrespective of the type or magnitude of it. The purpose is to make seeking and providing services/jobs easier now than ever. It is the one-stop solution for everyone out there, making it easier for people to handle/ manage their appointments/schedules. It aims to provide a hassle-free solution for an otherwise overwhelming and tedious situation. With simple yet beautiful user-friendly UI design, the app makes it easier for all it’s target audiences.
+HIRED is an android app which acts as a platform for everyone who is in pursuit of a job/service or is providing one, irrespective of the type or magnitude of it. The purpose is to make seeking and providing services/jobs easier now than ever. It is the one-stop solution for everyone out there, making it easier for people to handle/ manage their appointments/schedules. It aims to provide a hassle-free solution for an otherwise overwhelming and tedious situation. With simple yet beautiful user-friendly UI design, the app makes it easier for all it’s target audiences.
 
 ### Features
 
