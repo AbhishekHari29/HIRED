@@ -1,6 +1,6 @@
 # HIRED
 
-<img src="Hired/hired_square.png" width="25%">
+<img src="Hired/screenshots/app_logo.jpg" width="40%">
 
 ### Description
 
@@ -16,11 +16,19 @@ HIRED is an android app which acts as a platform for everyone who is in pursuit 
 - Maintain User Profile
 - User Authentication
 
-### Technologies
+### Tech Stack
 
 - Android Studio IDE
 - Java
 - Firebase
+
+### Screenshots
+
+<img src="Hired/screenshots/splash.jpg" height="600" width="300" hspace="40"><img src="Hired/screenshots/dashboard.jpg" height="600" width="300" hspace="40">
+
+<img src="Hired/screenshots/navigation.jpg" height="600" width="300" hspace="40"><img src="Hired/screenshots/profile.jpg" height="600" width="300" hspace="40">
+
+<img src="Hired/screenshots/search.jpg" height="600" width="300" hspace="40"><img src="Hired/screenshots/appointment.jpg" height="600" width="300" hspace="40">
 
 ### Team Members
 
